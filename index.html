@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Página Principal - Pankikics</title>
-    <meta name="description" content="Bienvenido a Pankikics, su tienda en línea para productos de calidad. Descubra nuestra selección de artículos cuidadosamente elegidos.">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Catálogo - Pankikics</title>
+    <!-- Incluir bibliotecas de Firebase (Compatibilidad) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <!-- Biblioteca para códigos QR -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
     <!-- Fuente de Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <!-- Tailwind CSS -->
@@ -13,88 +18,94 @@
         /* Estilos de Papel Viejo */
         :root {
             --bg-dark: #1A1100; /* Fondo muy oscuro, casi negro, con tono sepia */
-            --card-dark: #3F3323; /* Marrón oscuro para contenedores */
+            --card-dark: #3F3323; /* Marrón oscuro para contenedores/modales */
             --text-light: #F5E6CC; /* Papel viejo/crema para texto */
             --accent: #000000; /* Negro para acentos/bordes */
             --accent-hover: #111111; /* Negro ligeramente más claro */
-            --error: #704214; /* Usar sepia oscuro para errores/advertencias */
-            --sepia: #704214; /* Sepia medio */
+            --error: #964B00; /* Marrón oscuro/Ocre para advertencias */
+            --sepia: #704214; /* Sepia medio para el fondo de las tarjetas */
         }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
+
         body {
-            background-color: var(--bg-dark); /* Fondo oscuro */
-            color: var(--text-light);
+            background-color: var(--bg-dark);
             font-family: 'Montserrat', sans-serif;
+            color: var(--text-light);
             line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            /* Filtro para intensificar el look de papel viejo y contraste */
+            filter: contrast(105%) sepia(5%); 
         }
 
-        /* Contenedor principal con estilo vintage */
-        header, main, footer {
-            border: 4px solid var(--accent); /* Borde grueso */
+        /* Estilo de la barra de desplazamiento */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--card-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; transition: background 0.3s ease; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-hover); }
+
+        header {
             background-color: var(--card-dark);
-            margin: 20px auto;
-            padding: 20px;
-            box-shadow: 10px 10px 0px var(--accent); /* Sombra de estilo cartoon */
-            transform: rotate(0.5deg); /* Ligero giro para look dibujado a mano */
-            max-width: 900px;
-            width: 95%;
-            border-radius: 8px; /* Bordes ligeramente redondeados */
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 8px 8px 0px var(--accent);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            transform: rotate(0.25deg);
+            border-bottom: 5px dashed var(--accent);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: var(--text-light);
+            text-shadow: 3px 3px 0 var(--accent);
+            border-bottom: 4px dashed var(--accent);
+            padding-bottom: 10px;
+            margin-bottom: 0;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transform: rotate(0.5deg);
+            font-size: 1.5rem;
         }
         
-        main {
+        .header-buttons {
             display: flex;
-            flex-direction: column;
-            gap: 20px;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap; 
+        }
+
+        /* Estilo para la barra de búsqueda*/
+        #searchInput {
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 2px;
+            border: 3px solid var(--accent);
+            background-color: var(--sepia);
+            color: var(--text-light);
+            font-size: 0.9rem;
+            box-shadow: 4px 4px 0px var(--accent);
             transform: rotate(-0.5deg);
         }
 
-        /* Estilo para los títulos (como si fueran dibujados con relieve) */
-        h1, h2 {
+        /* Botones generales*/
+        button, .btn {
+            background-color: var(--accent); 
             color: var(--text-light);
-            text-shadow: 3px 3px 0 var(--accent); /* Simular relieve */
-            border-bottom: 4px solid var(--accent);
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* Estilo para la navegación y botones */
-        .main-nav a, #menu-toggle {
-            background-color: var(--accent);
-            color: var(--text-light);
-            border: 3px solid var(--text-light);
+            border: 3px solid var(--text-light); 
             padding: 10px 15px;
             border-radius: 5px;
-            transition: all 0.1s ease;
-            box-shadow: 4px 4px 0 var(--text-light);
-            transform: rotate(-1deg);
-            display: inline-block;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .main-nav a:hover, #menu-toggle:hover {
-            background-color: var(--accent-hover);
-            transform: translate(2px, 2px) rotate(-1deg); /* Efecto "presionado" */
-            box-shadow: 2px 2px 0 var(--text-light);
-        }
-
-        .btn-regresar {
-            background-color: var(--accent);
-            color: var(--text-light);
-            border: 2px solid var(--text-light);
-            padding: 10px 20px;
-            border-radius: 5px;
-            box-shadow: 3px 3px 0px var(--text-light);
+            box-shadow: 5px 5px 0px var(--text-light); 
             transition: all 0.1s;
             font-weight: 600;
             text-transform: uppercase;
@@ -102,140 +113,898 @@
             transform: rotate(-0.5deg);
             cursor: pointer;
             font-size: 0.9rem;
-            text-decoration: none;
-            display: inline-block;
+            flex-shrink: 0;
         }
 
-        .btn-regresar:hover {
+        button:hover, .btn:hover {
             background-color: var(--accent-hover);
             transform: translate(1px, 1px) rotate(-0.5deg);
-            box-shadow: 1px 1px 0px var(--text-light);
-        }
-        
-        /* Estilos específicos del menú móvil */
-        .menu-icon {
-            display: block;
-            cursor: pointer;
-            z-index: 20;
+            box-shadow: 2px 2px 0px var(--text-light);
         }
 
-        .main-nav {
-            display: none;
-            flex-direction: column;
+        /* Nuevo Estilo para el icono del carrito - AHORA COMO BOTÓN */
+        .cart-icon {
+            background-color: var(--accent); /* Fondo negro */
+            color: var(--text-light);
+            border: 3px solid var(--text-light);
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 5px 5px 0px var(--text-light); 
+            transition: all 0.1s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transform: rotate(-0.5deg);
+            cursor: pointer;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            
+            position: relative; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1; 
+        }
+        
+        .cart-icon:hover {
+            background-color: var(--accent-hover);
+            transform: translate(1px, 1px) rotate(-0.5deg);
+            box-shadow: 2px 2px 0px var(--text-light);
+        }
+
+        /* Estilo para la burbuja de conteo del carrito - MEJORADA */
+        .cart-count {
             position: absolute;
-            top: 70px;
+            top: -8px; 
+            right: -8px; 
+            min-width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            background-color: var(--error); /* Usar error para llamar la atención */
+            color: var(--text-light);
+            border: 2px solid var(--text-light);
+            box-shadow: 2px 2px 0px var(--accent); 
+            padding: 2px;
+            transform: rotate(3deg);
+            line-height: 1;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        /* Tarjetas de Producto (Vista Cliente) */
+        .card {
+            background-color: var(--sepia);
+            color: var(--text-light);
+            border: 3px solid var(--accent);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 8px 8px 0px var(--accent); /* Sombra más fuerte en la tarjeta */
+            transition: transform 0.2s, box-shadow 0.2s;
+            transform: rotate(0.25deg);
+            cursor: pointer;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .card:hover {
+            transform: translate(-5px, -5px) rotate(0.25deg);
+            box-shadow: 12px 12px 0px var(--accent);
+        }
+        
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .card-info {
+            padding: 1rem;
+        }
+        
+        .card .btnVer, .card .btnCarrito {
+            width: 100%;
+            margin-top: 0.8rem;
+            background-color: var(--accent); /* Fondo negro */
+            border: 2px solid var(--text-light);
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            box-shadow: 2px 2px 0px var(--text-light);
+            transform: rotate(0deg);
+        }
+
+        /* Modales (General) */
+        .modal {
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+            z-index: 1000;
+            display: flex;
+            position: fixed;
+            top: 0;
             left: 0;
             width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
             background-color: var(--card-dark);
-            padding: 10px;
-            box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.5);
-            z-index: 10;
-        }
-
-        .main-nav.active {
-            display: flex;
-        }
-
-        .main-nav a {
-            margin: 5px 0;
-            text-align: center;
+            color: var(--text-light);
+            border: 7px solid var(--accent); /* Borde más grueso */
+            box-shadow: 20px 20px 0px var(--accent); /* Sombra más grande */
+            transform: rotate(-0.5deg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 500px;
+            margin: 2rem 0;
         }
         
-        @media (min-width: 768px) {
-            .menu-icon {
-                display: none;
+        .modal h2 {
+            margin-bottom: 1.2rem;
+            color: var(--text-light);
+            font-size: 1.3rem;
+            text-shadow: 2px 2px 0 var(--accent);
+            border-bottom: 3px dashed var(--accent);
+            padding-bottom: 5px;
+        }
+
+        form input, form textarea {
+            width: 100%;
+            padding: 0.7rem;
+            margin-bottom: 0.8rem;
+            border-radius: 2px;
+            border: 3px solid var(--accent); /* Borde de input más grueso */
+            background-color: var(--sepia);
+            color: var(--text-light);
+            font-size: 0.9rem;
+            box-shadow: 4px 4px 0px var(--accent); /* Sombra de input más pronunciada */
+        }
+        
+        form textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .error {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: -0.5rem;
+            margin-bottom: 0.5rem;
+            display: none;
+            text-shadow: 1px 1px 0 var(--accent);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        
+        /* Botón de Eliminar - Fondo negro, borde de error */
+        .btn-delete {
+            background-color: var(--accent);
+            border: 2px solid var(--error);
+            box-shadow: 3px 3px 0px var(--error);
+            transform: rotate(0.5deg);
+            flex-grow: 1;
+        }
+        
+        /* Botón de Editar - Fondo negro, borde normal */
+        .btn-edit {
+            background-color: var(--accent);
+            border: 2px solid var(--text-light);
+            box-shadow: 3px 3px 0px var(--text-light);
+            transform: rotate(-0.5deg);
+            flex-grow: 1;
+        }
+        
+        /* Botón de Cancelar/Cerrar - Fondo negro, borde sepia para diferenciarlo */
+        .btn-cancel {
+            background-color: var(--accent);
+            border: 2px solid var(--sepia);
+            box-shadow: 3px 3px 0px var(--sepia);
+            transform: rotate(-0.5deg);
+            flex-grow: 1;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px dashed var(--accent);
+        }
+        
+        .cart-item-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .cart-item-info img {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+        }
+        
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Botón de quitar artículo del carrito - Fondo negro */
+        .cart-item-actions button {
+            background-color: var(--accent);
+            border: 2px solid var(--error); /* Borde de error para "quitar" */
+            border-radius: 5px;
+            padding: 0.4rem;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+            box-shadow: 1px 1px 0px var(--text-light);
+            transform: rotate(1deg);
+        }
+        
+        #qrCode canvas {
+            background: var(--text-light);
+            padding: 5px;
+            border-radius: 5px;
+            border: 3px solid var(--accent);
+            transform: rotate(-1deg);
+        }
+
+        /* AJUSTES PARA MÓVILES */
+        @media (max-width: 600px) {
+            
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-bottom: 0.5rem; 
+                transform: rotate(0deg); 
             }
-            .main-nav {
-                display: flex;
-                flex-direction: row;
-                position: static;
-                width: auto;
-                background-color: transparent;
-                padding: 0;
-                box-shadow: none;
-                gap: 10px;
+
+            h1 {
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+                transform: rotate(0deg);
             }
-            .main-nav a {
-                margin: 0;
+            
+            .header-buttons {
+                width: 100%;
+                flex-direction: row; 
+                gap: 0.5rem;
+                justify-content: space-between;
+                margin-top: 10px;
+            }
+            
+            .search-container {
+                flex-grow: 1;
+                margin-left: 0;
+            }
+
+            /* Se aplica al input de búsqueda en móvil */
+            #searchInput {
+                transform: rotate(0deg); 
+                box-shadow: 3px 3px 0px var(--accent); /* Sombra más pequeña en móvil */
+            }
+
+            /* Botones de acción rápida más pequeños (Add y Cart) */
+            #btnAdd, .cart-icon {
+                font-size: 0.8rem;
+                padding: 8px 10px;
+                flex-grow: 0;
+                transform: rotate(0deg);
+                box-shadow: 3px 3px 0px var(--text-light);
+            }
+
+            .grid {
+                grid-template-columns: 1fr; 
+                gap: 1rem;
+            }
+
+            .card {
+                transform: rotate(0deg); 
+                box-shadow: 4px 4px 0px var(--accent);
+            }
+
+            .modal-content {
+                max-width: 95%;
+                margin: 1rem auto;
+                transform: rotate(0deg);
+                box-shadow: 10px 10px 0px var(--accent);
+                padding: 1rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            /* Botones dentro de modales sin rotación y con sombra ajustada */
+            button, .btn {
+                font-size: 0.85rem;
+                padding: 10px 15px;
+                box-shadow: 3px 3px 0px var(--text-light);
                 transform: rotate(0deg);
             }
         }
-
-        /* Secciones de contenido */
-        main section {
-            background-color: var(--sepia); /* Usar un sepia más claro para el contenido interior */
-            border: 3px dashed var(--accent);
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 5px 5px 0px var(--accent);
-            transform: rotate(0.1deg);
-        }
-
-        /* Footer */
-        footer {
-            margin-top: auto;
-            text-align: center;
-            padding: 10px;
-            transform: rotate(0.2deg);
-        }
     </style>
-  </head>
-  <body>
-    <header class="w-full flex justify-between items-center px-4">
-      <h1 class="text-3xl font-bold p-0 border-none m-0 transform rotate(-1deg)">PANKIKICS</h1>
-      <nav id="main-nav" class="main-nav">
-        <a href="#inicio">Inicio</a>
-        <a href="#productos">Productos Destacados</a>
-        <a href="#contactos">Contactos</a>
-      </nav>
-      <div id="menu-toggle" class="menu-icon md:hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="var(--text-light)" viewBox="0 0 24 24" stroke-width="2.5" stroke="var(--accent)" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
-      </div>
-    </header>
-    <main>
-      <section id="inicio">
-        <h2>Bienvenido al Mundo de Pankikics</h2>
-        <p>Somos su destino para productos de alta calidad y una experiencia de compra única. Navegue por nuestra selección y encuentre lo que busca con facilidad.</p>
-        <div class="mt-4 flex flex-col sm:flex-row gap-4">
-            <a href="catalogo-de-productos.html" class="btn-regresar">Catálogo Completo</a>
-            <a href="#acerca" class="text-center">Saber Más</a>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h1>🍽️ Pankikics - Admin</h1>
+            <span class="product-counter" id="productCount"></span>
         </div>
-      </section>
-      <section id="productos">
-        <h2>Productos Destacados</h2>
-        <p>Cada ítem es seleccionado con cuidado para garantizar su satisfacción.</p>
-        <p>Visite nuestro catálogo completo para ver todas las opciones disponibles.</p>
-      </section>
-      <section id="acerca">
-        <h2>Acerca de Nosotros</h2>
-        <p>Somos una empresa comprometida con la excelencia y la innovación en el comercio electrónico. Nuestro objetivo es proporcionar a nuestros clientes una experiencia de compra segura, conveniente y placentera.</p>
-      </section>
-      <section id="contactos">
-        <h2>Contactos</h2>
-        <p>¿Tiene preguntas o necesita asistencia? Contáctenos a través de los siguientes medios:</p>
-        <ul class="list-disc list-inside mt-2 ml-4">
-          <li>Email: info@pankikics.com</li>
-          <li>Teléfono: +503 1234-5678</li>
-          <li>Dirección: Calle Principal, Ciudad, País</li>
-        </ul>
-      </section>
-      <section id="terminos">
-        <h2>Términos y Condiciones</h2>
-        <p>Al utilizar nuestro sitio web y realizar compras, usted acepta nuestros términos y condiciones. Para más detalles, consulte nuestra política completa.</p>
-      </section>
-    </main>
-    <footer>
-      <p>&copy; 2025 Pankikics. Todos los derechos reservados.</p>
-    </footer>
-    <script>
-      const menuToggle = document.getElementById('menu-toggle');
-      const mainNav = document.getElementById('main-nav');
+        <div class="header-buttons">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Buscar platos...">
+            </div>
+            <button id="btnAdd">➕ Agregar</button>
+            <div class="cart-icon" id="btnCart">
+                🛒
+                <!-- Burbuja de conteo ya no tiene estilo inline, usa la clase .cart-count -->
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </div>
+    </header>
 
-      menuToggle.addEventListener('click', () => {
-          mainNav.classList.toggle('active');
-      });
+    <div class="grid" id="productGrid"></div>
+
+    <!-- Modal para agregar/editar plato -->
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <h2 id="addModalTitle">Nuevo Plato</h2>
+            <form id="formAdd">
+                <input type="text" id="nombre" placeholder="Nombre del plato" required>
+                <textarea id="descripcion" placeholder="Descripción" rows="3" required></textarea>
+                <input type="number" id="precio" placeholder="Precio (USD)" step="0.01" required>
+
+                <!-- CAMBIADO: Input de URL simple en lugar de subida de archivo -->
+                <label for="imagenURL" style="font-size: 0.9rem;">URL de Imagen (Para persistencia)</label>
+                <input type="url" id="imagenURL" placeholder="http://ejemplo.com/imagen.jpg" required>
+
+                <div id="errorMsg" class="error"></div>
+                
+                <div class="button-group">
+                    <button type="submit" id="submitButton">Publicar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para detalles del plato -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <h2 id="detailNombre"></h2>
+            <!-- Agregado manejo de error para la imagen -->
+            <img id="detailImagen" src="" alt="" style="width: 100%; border-radius: 6px; margin: 0.8rem 0; border: 3px solid var(--accent);" 
+                onerror="this.src='https://placehold.co/400x300/1A1100/F5E6CC?text=Imagen+de+Tinta+Rota';" loading="lazy">
+            <p id="detailDescripcion" style="margin-bottom: 1rem;"></p>
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                <div>
+                    <strong>Precio:</strong> $<span id="detailPrecio"></span> USD
+                </div>
+            </div>
+
+            <div class="codes-container">
+                <div class="code-item">
+                    <p>Código QR</p>
+                    <div id="qrCode"></div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button id="btnAddCart">🛒 Agregar a la Orden</button>
+                <button id="btnEdit" class="btn-edit">✏️ Editar</button>
+                <button id="btnDelete" class="btn-delete">🗑️ Eliminar</button>
+                <button id="closeDetail" class="btn-cancel">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para el carrito de compras -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <h2>🛒 Carrito de Compras</h2>
+            <ul id="cartItemsList"></ul>
+            <div class="cart-total">Total: $<span id="cartTotal">0.00</span> USD</div>
+            <div class="button-group">
+                <button id="btnBuy">💲 Comprar</button>
+                <button id="closeCart" class="btn-cancel">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación de compra -->
+    <div class="modal" id="purchaseConfirmModal">
+        <div class="modal-content">
+            <div class="modal-message">
+                <h3>¡Compra Realizada con Éxito! 🎉</h3>
+                <p>Tu orden ha sido procesada.</p>
+            </div>
+            <div class="button-group">
+                <button id="closePurchaseConfirm" class="btn-cancel" style="width: 100%;">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación para eliminar -->
+    <div class="modal" id="deleteConfirmModal">
+        <div class="modal-content">
+            <h2>¿Estás seguro?</h2>
+            <p>Esta acción no se puede deshacer.</p>
+            <div class="button-group">
+                <button id="btnConfirmDelete" class="btn-delete">Sí, Eliminar</button>
+                <button id="btnCancelDelete" class="btn-cancel">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de Firebase - Reemplaza con tus propios datos
+        const firebaseConfig = {
+          apiKey: "TU_API_KEY", // Reemplaza con tu API Key
+          authDomain: "tienda-ropa-tarea-e3e82.firebaseapp.com",
+          projectId: "tienda-ropa-tarea-e3e82",
+          storageBucket: "",
+          appId: "1:721478101439:web:TU_APP_ID" // Reemplaza con tu App ID
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        const db = firebase.firestore();
+
+        let currentProductIdToEdit = null;
+        let currentProductIdToDelete = null;
+        let allProducts = []; 
+        let cartItems = []; 
+        let currentItemToAdd = null; 
+
+        // Obtener elementos del DOM
+        const btnAdd = document.getElementById('btnAdd');
+        const btnCart = document.getElementById('btnCart');
+        const addModal = document.getElementById('addModal');
+        const formAdd = document.getElementById('formAdd');
+        const productGrid = document.getElementById('productGrid');
+        const detailModal = document.getElementById('detailModal');
+        const cartModal = document.getElementById('cartModal');
+        const purchaseConfirmModal = document.getElementById('purchaseConfirmModal');
+        const closePurchaseConfirmBtn = document.getElementById('closePurchaseConfirm');
+        const cartItemsList = document.getElementById('cartItemsList');
+        const cartTotalSpan = document.getElementById('cartTotal');
+        const btnBuy = document.getElementById('btnBuy');
+        // Usaremos esta nueva ID en lugar de 'imagen' para el URL
+        const imagenURLInput = document.getElementById('imagenURL'); 
+        const productCount = document.getElementById('productCount');
+        const closeDetailBtn = document.getElementById('closeDetail');
+        const closeCartBtn = document.getElementById('closeCart');
+        const btnEdit = document.getElementById('btnEdit');
+        const btnDelete = document.getElementById('btnDelete');
+        const btnAddCart = document.getElementById('btnAddCart');
+        const deleteConfirmModal = document.getElementById('deleteConfirmModal');
+        const btnConfirmDelete = document.getElementById('btnConfirmDelete');
+        const btnCancelDelete = document.getElementById('btnCancelDelete');
+        const searchInput = document.getElementById('searchInput');
+        const addModalTitle = document.getElementById('addModalTitle');
+        const submitButton = document.getElementById('submitButton');
+        const errorMsg = document.getElementById('errorMsg');
+
+
+        // Función para agregar productos iniciales (¡PANQUEQUES RESTAURADOS!)
+        async function agregarProductosIniciales() {
+            const collectionRef = db.collection('productos');
+            const snapshot = await collectionRef.get();
+            if (snapshot.empty) {
+                const productosIniciales = [
+                    {
+                        nombre: "Panqueques Clásicos",
+                        descripcion: "Torre de tres panqueques con mantequilla y jarabe de arce. Simple y delicioso.",
+                        precio: 7.50,
+                        // Imagen
+                        imagen: "https://placehold.co/400x300/3F3323/F5E6CC?text=Clasicos",
+                        fecha: new Date()
+                    },
+                    {
+                        nombre: "Panqueques Tinta (Choco)",
+                        descripcion: "Panqueques de chocolate oscuro con crema de vainilla. Para los amantes de la oscuridad.",
+                        precio: 9.00,
+                        // Imagen
+                        imagen: "https://placehold.co/400x300/1A1100/704214?text=Tinta+Negra",
+                        fecha: new Date()
+                    },
+                    {
+                        nombre: "Panqueques Frutales",
+                        descripcion: "Panqueques con una mezcla de fresas y arándanos frescos, espolvoreados con azúcar glass.",
+                        precio: 8.75,
+                        // Imagen
+                        imagen: "https://placehold.co/400x300/704214/F5E6CC?text=Frutas",
+                        fecha: new Date()
+                    },
+                    {
+                        nombre: "Panqueques Sepia",
+                        descripcion: "Nuestra especialidad con sabor a canela y un toque de crema agria, un clásico antiguo.",
+                        precio: 8.00,
+                        // Imagen
+                        imagen: "https://placehold.co/400x300/704214/3F3323?text=Sepia",
+                        fecha: new Date()
+                    }
+                ];
+
+                const batch = db.batch();
+                productosIniciales.forEach(producto => {
+                    const docRef = collectionRef.doc();
+                    batch.set(docRef, producto);
+                });
+                await batch.commit();
+                console.log("Productos iniciales agregados (Pancakes).");
+            }
+        }
+
+        // Abrir modal de agregar producto
+        btnAdd.addEventListener('click', () => {
+            addModalTitle.textContent = 'Nuevo Plato';
+            submitButton.textContent = 'Publicar';
+            formAdd.reset();
+            // Eliminamos la lógica de previsualización de archivos
+            currentProductIdToEdit = null;
+            showModal(addModal);
+        });
+
+        // Abrir modal del carrito
+        btnCart.addEventListener('click', () => {
+            renderCartItems();
+            showModal(cartModal);
+        });
+
+        // Enviar formulario (maneja tanto agregar como editar)
+        formAdd.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const isEditing = currentProductIdToEdit !== null;
+
+            submitButton.disabled = true;
+            submitButton.textContent = isEditing ? 'Guardando...' : 'Publicando...';
+            errorMsg.style.display = 'none';
+
+            try {
+                // Usamos el valor del input de URL directamente
+                const imageUrl = imagenURLInput.value.trim(); 
+                
+                if (!imageUrl) {
+                    errorMsg.textContent = 'La URL de la imagen es obligatoria.';
+                    errorMsg.style.display = 'block';
+                    throw new Error("Missing Image URL");
+                }
+                
+                const data = {
+                    nombre: document.getElementById('nombre').value,
+                    descripcion: document.getElementById('descripcion').value,
+                    precio: parseFloat(document.getElementById('precio').value),
+                    imagen: imageUrl 
+                };
+
+                if (isEditing) {
+                    await db.collection('productos').doc(currentProductIdToEdit).update(data);
+                    console.log("Producto actualizado:", currentProductIdToEdit);
+                } else {
+                    data.fecha = new Date();
+                    await db.collection('productos').add(data);
+                    console.log("Nuevo producto añadido.");
+                }
+
+                formAdd.reset();
+                hideModal(addModal);
+
+            } catch (error) {
+                console.error("Error:", error);
+                // Si el error fue solo la URL faltante, ya lo pusimos en errorMsg. Si es de Firebase:
+                if (error.message !== "Missing Image URL") {
+                    errorMsg.textContent = 'Error: No se pudo guardar en Firebase. ' + error.message;
+                    errorMsg.style.display = 'block';
+                }
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = isEditing ? 'Guardar Cambios' : 'Publicar';
+            }
+        });
+
+        // Función para renderizar una tarjeta de producto
+        function createProductCard(doc) {
+            const producto = doc.data();
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" 
+                    onerror="this.src='https://placehold.co/250x180/1A1100/F5E6CC?text=Tinta+Rota';"
+                    style="transform: rotate(-0.5deg);">
+                <div class="card-info">
+                    <h3 style="margin: 0; transform: rotate(0.5deg); text-shadow: 1px 1px 0 var(--accent);">${producto.nombre}</h3>
+                    <p class="price" style="transform: rotate(-0.5deg);">$${producto.precio.toFixed(2)} USD</p>
+                    <button class="btnVer" data-id="${doc.id}">👀 Ver Detalles</button>
+                    <button class="btnCarrito" data-id="${doc.id}">➕ Agregar a la Orden</button>
+                </div>
+            `;
+            productGrid.appendChild(card);
+
+            card.querySelector('.btnVer').addEventListener('click', () => {
+                mostrarDetalles(doc.id);
+            });
+            card.querySelector('.btnCarrito').addEventListener('click', () => {
+                const item = allProducts.find(p => p.id === doc.id);
+                if (item) {
+                    // Pasamos la data y el ID
+                    addToCart(item.data(), item.id); 
+                }
+            });
+        }
+
+        // Escuchar cambios en la base de datos y actualizar el catálogo
+        db.collection('productos').orderBy('fecha', 'desc').onSnapshot((snapshot) => {
+            allProducts = snapshot.docs; // Guardar todos los productos
+            filterProducts();
+            productCount.textContent = `(${allProducts.length} platos)`;
+        }, (error) => {
+            console.error("Error al escuchar cambios en Firestore:", error);
+        });
+
+        // Función para filtrar los productos según el término de búsqueda
+        function filterProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            productGrid.innerHTML = '';
+
+            const filteredProducts = allProducts.filter(doc => {
+                const producto = doc.data();
+                return producto.nombre.toLowerCase().includes(searchTerm) || producto.descripcion.toLowerCase().includes(searchTerm);
+            });
+
+            filteredProducts.forEach((doc) => {
+                createProductCard(doc);
+            });
+        }
+
+        // Event listener para el campo de búsqueda
+        searchInput.addEventListener('input', filterProducts);
+
+        // Función para mostrar el modal de detalles de un plato
+        async function mostrarDetalles(id) {
+            try {
+                const docRef = db.collection('productos').doc(id);
+                const doc = await docRef.get();
+                if (doc.exists) {
+                    const producto = doc.data();
+
+                    currentProductIdToEdit = id; 
+                    currentProductIdToDelete = id; 
+                    currentItemToAdd = { ...producto, id: doc.id }; 
+
+                    document.getElementById('detailNombre').textContent = producto.nombre;
+                    document.getElementById('detailImagen').src = producto.imagen;
+                    document.getElementById('detailImagen').alt = producto.nombre;
+                    document.getElementById('detailDescripcion').textContent = producto.descripcion;
+                    document.getElementById('detailPrecio').textContent = producto.precio.toFixed(2);
+
+                    const productUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?id=${id}`;
+
+                    const qr = qrcode(0, 'L');
+                    qr.addData(productUrl);
+                    qr.make();
+                    document.getElementById('qrCode').innerHTML = qr.createImgTag(4);
+
+                    showModal(detailModal);
+
+                } else {
+                    console.error("No se encontró el documento con ID:", id);
+                }
+            } catch (error) {
+                console.error("Error al obtener los detalles:", error);
+            }
+        }
+
+        // Funciones del Carrito de Compras
+        function addToCart(itemData, itemId) {
+            const existingItemIndex = cartItems.findIndex(i => i.id === itemId);
+            if (existingItemIndex > -1) {
+                cartItems[existingItemIndex].quantity += 1;
+            } else {
+                // Aseguramos que el objeto tiene el ID y la cantidad
+                cartItems.push({ ...itemData, id: itemId, quantity: 1 });
+            }
+            updateCartCount();
+            // Ocultamos el modal de detalles si estaba abierto, ya que la adición fue exitosa.
+            hideModal(detailModal); 
+        }
+
+        function removeFromCart(itemId) {
+            cartItems = cartItems.filter(item => item.id !== itemId);
+            updateCartCount();
+            renderCartItems();
+        }
+
+        function updateCartCount() {
+            const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+        }
+
+        function renderCartItems() {
+            cartItemsList.innerHTML = '';
+            let total = 0;
+            if (cartItems.length === 0) {
+                cartItemsList.innerHTML = '<li style="text-align: center; color: var(--text-light); opacity: 0.7;">El carrito está vacío.</li>';
+            } else {
+                cartItems.forEach(item => {
+                    total += item.precio * item.quantity;
+                    const li = document.createElement('li');
+                    li.className = 'cart-item';
+                    li.innerHTML = `
+                        <div class="cart-item-info">
+                            <img src="${item.imagen}" alt="${item.nombre}" onerror="this.src='https://placehold.co/60x60/1A1100/F5E6CC?text=Comida';" loading="lazy">
+                            <div>
+                                <h4 style="margin:0;">${item.nombre}</h4>
+                                <p>$${item.precio.toFixed(2)} x ${item.quantity}</p>
+                            </div>
+                        </div>
+                        <div class="cart-item-actions">
+                            <p class="price" style="color: var(--text-light);">$${(item.precio * item.quantity).toFixed(2)}</p>
+                            <button onclick="removeFromCart('${item.id}')">✖️</button>
+                        </div>
+                    `;
+                    cartItemsList.appendChild(li);
+                });
+            }
+            cartTotalSpan.textContent = total.toFixed(2);
+        }
+
+        btnBuy.addEventListener('click', () => {
+            if (cartItems.length === 0) return;
+            // Usamos un modal en lugar de alert
+            hideModal(cartModal);
+            showModal(purchaseConfirmModal);
+            cartItems = [];
+            updateCartCount();
+        });
+
+        // Evento para agregar al carrito desde el modal de detalles
+        btnAddCart.addEventListener('click', () => {
+            if (currentItemToAdd) {
+                // currentItemToAdd ya incluye el ID y la data
+                addToCart(currentItemToAdd, currentItemToAdd.id); 
+            }
+        });
+
+        // Funciones para mostrar y ocultar modales con transiciones
+        function showModal(modalElement) {
+            modalElement.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideModal(modalElement) {
+            modalElement.classList.remove('show');
+            modalElement.addEventListener('transitionend', function handler() {
+                document.body.style.overflow = 'auto';
+                modalElement.removeEventListener('transitionend', handler);
+            });
+        }
+
+        // Función para cerrar todos los modales
+        function cerrarModales() {
+            hideModal(addModal);
+            hideModal(detailModal);
+            hideModal(cartModal);
+            hideModal(purchaseConfirmModal);
+            hideModal(deleteConfirmModal);
+            currentProductIdToEdit = null;
+            currentProductIdToDelete = null;
+            currentItemToAdd = null;
+            if (window.location.search) {
+                window.history.pushState({}, document.title, window.location.pathname);
+            }
+        }
+
+        // Event listener para el botón de editar
+        btnEdit.addEventListener('click', async () => {
+            const docRef = db.collection('productos').doc(currentProductIdToEdit);
+            const doc = await docRef.get();
+            if (doc.exists) {
+                const producto = doc.data();
+                document.getElementById('nombre').value = producto.nombre;
+                document.getElementById('descripcion').value = producto.descripcion;
+                document.getElementById('precio').value = producto.precio;
+
+                // Llenamos el input URL
+                imagenURLInput.value = producto.imagen;
+                
+                addModalTitle.textContent = 'Editar Plato';
+                submitButton.textContent = 'Guardar Cambios';
+
+                hideModal(detailModal);
+                showModal(addModal);
+            }
+        });
+
+        // Event listener para el botón de eliminar, abre el modal de confirmación
+        btnDelete.addEventListener('click', () => {
+            hideModal(detailModal);
+            showModal(deleteConfirmModal);
+        });
+
+        // Event listener para el botón de confirmar eliminación
+        btnConfirmDelete.addEventListener('click', async () => {
+            if (currentProductIdToDelete) {
+                try {
+                    await db.collection('productos').doc(currentProductIdToDelete).delete();
+                    console.log("Plato eliminado con éxito.");
+                } catch (error) {
+                    console.error("Error al eliminar el plato:", error);
+                } finally {
+                    cerrarModales();
+                }
+            }
+        });
+
+        // Event listener para el botón de cancelar eliminación
+        btnCancelDelete.addEventListener('click', () => {
+            hideModal(deleteConfirmModal);
+            showModal(detailModal);
+        });
+
+        // Detectar si hay un ID de producto en la URL al cargar la página
+        window.onload = function() {
+            agregarProductosIniciales();
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            if (productId) {
+                // Pequeño retraso para asegurar que Firebase cargue
+                setTimeout(() => mostrarDetalles(productId), 300); 
+            }
+        };
+
+        // Event listeners para cerrar modales
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                cerrarModales();
+            }
+        });
+
+        closeDetailBtn.addEventListener('click', cerrarModales);
+        closeCartBtn.addEventListener('click', cerrarModales);
+        closePurchaseConfirmBtn.addEventListener('click', cerrarModales);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                cerrarModales();
+            }
+        });
     </script>
-  </body>
+</body>
 </html>
