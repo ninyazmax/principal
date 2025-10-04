@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Página Principal - Pankikics</title>
+    <meta name="description" content="Bienvenido a Pankikics, su tienda en línea para productos de calidad. Descubra nuestra selección de artículos cuidadosamente elegidos.">
+    <!-- Fuente de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos de Papel Viejo */
+        :root {
+            --bg-dark: #1A1100; /* Fondo muy oscuro, casi negro, con tono sepia */
+            --card-dark: #3F3323; /* Marrón oscuro para contenedores */
+            --text-light: #F5E6CC; /* Papel viejo/crema para texto */
+            --accent: #000000; /* Negro para acentos/bordes */
+            --accent-hover: #111111; /* Negro ligeramente más claro */
+            --error: #704214; /* Usar sepia oscuro para errores/advertencias */
+            --sepia: #704214; /* Sepia medio */
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: var(--bg-dark); /* Fondo oscuro */
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Contenedor principal con estilo vintage */
+        header, main, footer {
+            border: 4px solid var(--accent); /* Borde grueso */
+            background-color: var(--card-dark);
+            margin: 20px auto;
+            padding: 20px;
+            box-shadow: 10px 10px 0px var(--accent); /* Sombra de estilo cartoon */
+            transform: rotate(0.5deg); /* Ligero giro para look dibujado a mano */
+            max-width: 900px;
+            width: 95%;
+            border-radius: 8px; /* Bordes ligeramente redondeados */
+        }
+        
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transform: rotate(-0.5deg);
+        }
+
+        /* Estilo para los títulos (como si fueran dibujados con relieve) */
+        h1, h2 {
+            color: var(--text-light);
+            text-shadow: 3px 3px 0 var(--accent); /* Simular relieve */
+            border-bottom: 4px solid var(--accent);
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Estilo para la navegación y botones */
+        .main-nav a, #menu-toggle {
+            background-color: var(--accent);
+            color: var(--text-light);
+            border: 3px solid var(--text-light);
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.1s ease;
+            box-shadow: 4px 4px 0 var(--text-light);
+            transform: rotate(-1deg);
+            display: inline-block;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .main-nav a:hover, #menu-toggle:hover {
+            background-color: var(--accent-hover);
+            transform: translate(2px, 2px) rotate(-1deg); /* Efecto "presionado" */
+            box-shadow: 2px 2px 0 var(--text-light);
+        }
+
+        .btn-regresar {
+            background-color: var(--accent);
+            color: var(--text-light);
+            border: 2px solid var(--text-light);
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 3px 3px 0px var(--text-light);
+            transition: all 0.1s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transform: rotate(-0.5deg);
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-regresar:hover {
+            background-color: var(--accent-hover);
+            transform: translate(1px, 1px) rotate(-0.5deg);
+            box-shadow: 1px 1px 0px var(--text-light);
+        }
+        
+        /* Estilos específicos del menú móvil */
+        .menu-icon {
+            display: block;
+            cursor: pointer;
+            z-index: 20;
+        }
+
+        .main-nav {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background-color: var(--card-dark);
+            padding: 10px;
+            box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        .main-nav.active {
+            display: flex;
+        }
+
+        .main-nav a {
+            margin: 5px 0;
+            text-align: center;
+        }
+        
+        @media (min-width: 768px) {
+            .menu-icon {
+                display: none;
+            }
+            .main-nav {
+                display: flex;
+                flex-direction: row;
+                position: static;
+                width: auto;
+                background-color: transparent;
+                padding: 0;
+                box-shadow: none;
+                gap: 10px;
+            }
+            .main-nav a {
+                margin: 0;
+                transform: rotate(0deg);
+            }
+        }
+
+        /* Secciones de contenido */
+        main section {
+            background-color: var(--sepia); /* Usar un sepia más claro para el contenido interior */
+            border: 3px dashed var(--accent);
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 5px 5px 0px var(--accent);
+            transform: rotate(0.1deg);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 10px;
+            transform: rotate(0.2deg);
+        }
+    </style>
+  </head>
+  <body>
+    <header class="w-full flex justify-between items-center px-4">
+      <h1 class="text-3xl font-bold p-0 border-none m-0 transform rotate(-1deg)">PANKIKICS</h1>
+      <nav id="main-nav" class="main-nav">
+        <a href="#inicio">Inicio</a>
+        <a href="#productos">Productos Destacados</a>
+        <a href="#contactos">Contactos</a>
+      </nav>
+      <div id="menu-toggle" class="menu-icon md:hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="var(--text-light)" viewBox="0 0 24 24" stroke-width="2.5" stroke="var(--accent)" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </div>
+    </header>
+    <main>
+      <section id="inicio">
+        <h2>Bienvenido al Mundo de Pankikics</h2>
+        <p>Somos su destino para productos de alta calidad y una experiencia de compra única. Navegue por nuestra selección y encuentre lo que busca con facilidad.</p>
+        <div class="mt-4 flex flex-col sm:flex-row gap-4">
+            <a href="catalogo-de-productos.html" class="btn-regresar">Catálogo Completo</a>
+            <a href="#acerca" class="text-center">Saber Más</a>
+        </div>
+      </section>
+      <section id="productos">
+        <h2>Productos Destacados</h2>
+        <p>Cada ítem es seleccionado con cuidado para garantizar su satisfacción.</p>
+        <p>Visite nuestro catálogo completo para ver todas las opciones disponibles.</p>
+      </section>
+      <section id="acerca">
+        <h2>Acerca de Nosotros</h2>
+        <p>Somos una empresa comprometida con la excelencia y la innovación en el comercio electrónico. Nuestro objetivo es proporcionar a nuestros clientes una experiencia de compra segura, conveniente y placentera.</p>
+      </section>
+      <section id="contactos">
+        <h2>Contactos</h2>
+        <p>¿Tiene preguntas o necesita asistencia? Contáctenos a través de los siguientes medios:</p>
+        <ul class="list-disc list-inside mt-2 ml-4">
+          <li>Email: info@pankikics.com</li>
+          <li>Teléfono: +503 1234-5678</li>
+          <li>Dirección: Calle Principal, Ciudad, País</li>
+        </ul>
+      </section>
+      <section id="terminos">
+        <h2>Términos y Condiciones</h2>
+        <p>Al utilizar nuestro sitio web y realizar compras, usted acepta nuestros términos y condiciones. Para más detalles, consulte nuestra política completa.</p>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2025 Pankikics. Todos los derechos reservados.</p>
+    </footer>
+    <script>
+      const menuToggle = document.getElementById('menu-toggle');
+      const mainNav = document.getElementById('main-nav');
+
+      menuToggle.addEventListener('click', () => {
+          mainNav.classList.toggle('active');
+      });
+    </script>
+  </body>
+</html>
