@@ -1,237 +1,3063 @@
 <!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Página Principal - Pankikics</title>
-    <meta name="description" content="Bienvenido a Pankikics, su tienda en línea para productos de calidad. Descubra nuestra selección de artículos cuidadosamente elegidos.">
-    <!-- Fuente de Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS -->
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso de HTML - Code Lingua</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Estilos de Papel Viejo */
-        :root {
-            --bg-dark: #1A1100; /* Fondo muy oscuro, casi negro, con tono sepia */
-            --card-dark: #3F3323; /* Marrón oscuro para contenedores */
-            --text-light: #F5E6CC; /* Papel viejo/crema para texto */
-            --accent: #000000; /* Negro para acentos/bordes */
-            --accent-hover: #111111; /* Negro ligeramente más claro */
-            --error: #704214; /* Usar sepia oscuro para errores/advertencias */
-            --sepia: #704214; /* Sepia medio */
-        }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            background-color: var(--bg-dark); /* Fondo oscuro */
-            color: var(--text-light);
-            font-family: 'Montserrat', sans-serif;
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght=400;700&display=swap" rel="stylesheet">
+</head>
+<style>
+    /* Tokyo Night Theme */
+    :root {
+        --background: #1a1b26;
+        --foreground: #a9b1d6;
+        --card-background: #24283b;
+        --border: #414868;
+        --accent: #7aa2f7;
+        --accent-dark: #5a7edb;
+        --green: #9ece6a;
+        --yellow: #e0af68;
+        --red: #f7768e;
+        --font-sans: 'Inter', sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+    }
 
-        /* Contenedor principal con estilo vintage */
-        header, main, footer {
-            border: 4px solid var(--accent); /* Borde grueso */
-            background-color: var(--card-dark);
-            margin: 20px auto;
-            padding: 20px;
-            box-shadow: 10px 10px 0px var(--accent); /* Sombra de estilo cartoon */
-            transform: rotate(0.5deg); /* Ligero giro para look dibujado a mano */
-            max-width: 900px;
-            width: 95%;
-            border-radius: 8px; /* Bordes ligeramente redondeados */
-        }
-        
-        main {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            transform: rotate(-0.5deg);
-        }
+    body {
+        color: var(--foreground);
+        font-family: var(--font-sans);
+        margin: 0;
+        padding: 0;
+        position: relative;
+        overflow-x: hidden;
+    }
 
-        /* Estilo para los títulos (como si fueran dibujados con relieve) */
-        h1, h2 {
-            color: var(--text-light);
-            text-shadow: 3px 3px 0 var(--accent); /* Simular relieve */
-            border-bottom: 4px solid var(--accent);
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
 
-        /* Estilo para la navegación y botones */
-        .main-nav a, #menu-toggle {
-            background-color: var(--accent);
-            color: var(--text-light);
-            border: 3px solid var(--text-light);
-            padding: 10px 15px;
-            border-radius: 5px;
-            transition: all 0.1s ease;
-            box-shadow: 4px 4px 0 var(--text-light);
-            transform: rotate(-1deg);
-            display: inline-block;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .main-nav a:hover, #menu-toggle:hover {
-            background-color: var(--accent-hover);
-            transform: translate(2px, 2px) rotate(-1deg); /* Efecto "presionado" */
-            box-shadow: 2px 2px 0 var(--text-light);
-        }
+    /* Fondo animado */
+    .background-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        transition: opacity 0.5s ease;
+    }
 
-        .btn-regresar {
-            background-color: var(--accent);
-            color: var(--text-light);
-            border: 2px solid var(--text-light);
-            padding: 10px 20px;
-            border-radius: 5px;
-            box-shadow: 3px 3px 0px var(--text-light);
-            transition: all 0.1s;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transform: rotate(-0.5deg);
-            cursor: pointer;
-            font-size: 0.9rem;
-            text-decoration: none;
-            display: inline-block;
-        }
+    .background-day, .background-night {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;               
+        background-position: center;
+        opacity: 0;
+        transition: opacity 1s ease;
+    }
 
-        .btn-regresar:hover {
-            background-color: var(--accent-hover);
-            transform: translate(1px, 1px) rotate(-0.5deg);
-            box-shadow: 1px 1px 0px var(--text-light);
-        }
-        
-        /* Estilos específicos del menú móvil */
-        .menu-icon {
-            display: block;
-            cursor: pointer;
-            z-index: 20;
-        }
+    .background-day {
+        background-image: url('https://i.pinimg.com/originals/71/f1/b9/71f1b924a56150104ec16828f2d31b7f.gif');
+    }
 
-        .main-nav {
-            display: none;
-            flex-direction: column;
-            position: absolute;
-            top: 70px;
-            left: 0;
-            width: 100%;
-            background-color: var(--card-dark);
-            padding: 10px;
-            box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.5);
-            z-index: 10;
-        }
+    .background-night {
+        background-image: url('https://i.pinimg.com/originals/4c/23/98/4c2398e6be397bb08b5cb70b2192d730.gif');
+    }
 
-        .main-nav.active {
-            display: flex;
-        }
+    .dark .background-night {
+        opacity: 1;
+    }
 
-        .main-nav a {
-            margin: 5px 0;
-            text-align: center;
-        }
-        
-        @media (min-width: 768px) {
-            .menu-icon {
-                display: none;
-            }
-            .main-nav {
-                display: flex;
-                flex-direction: row;
-                position: static;
-                width: auto;
-                background-color: transparent;
-                padding: 0;
-                box-shadow: none;
-                gap: 10px;
-            }
-            .main-nav a {
-                margin: 0;
-                transform: rotate(0deg);
-            }
-        }
+    .background-day {
+        opacity: 1;
+    }
 
-        /* Secciones de contenido */
-        main section {
-            background-color: var(--sepia); /* Usar un sepia más claro para el contenido interior */
-            border: 3px dashed var(--accent);
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 5px 5px 0px var(--accent);
-            transform: rotate(0.1deg);
-        }
+    .content-box {
+        background-color: rgba(36, 40, 59, 0.85);
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 4rem);
+        margin: 2rem;
+    }
 
-        /* Footer */
-        footer {
-            margin-top: auto;
-            text-align: center;
-            padding: 10px;
-            transform: rotate(0.2deg);
+    /* Index Page Styles */
+    .main-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 4rem);
+        text-align: center;
+    }
+
+    .main-title {
+        font-size: 5rem;
+        font-weight: bold;
+        color: var(--accent);
+        text-shadow: 0 0 15px var(--accent);
+        margin-bottom: 1rem;
+    }
+
+    .main-subtitle {
+        font-size: 1.5rem;
+        margin-bottom: 3rem;
+        max-width: 600px;
+    }
+
+    .course-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        width: 100%;
+        max-width: 1200px;
+    }
+
+    .course-card-link {
+        text-decoration: none;
+    }
+
+    .course-card {
+        background-color: var(--card-background);
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        padding: 2rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .course-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        border-color: var(--accent);
+    }
+
+    .course-icon {
+        font-size: 3rem;
+        color: var(--accent);
+    }
+
+    .course-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--foreground);
+    }
+
+    .course-description {
+        color: var(--foreground);
+        opacity: 0.7;
+    }
+
+    /* Course Page Styles */
+    .panel {
+        display: none;
+        animation: fadeIn 0.5s ease;
+        width: 100%;
+    }
+
+    .panel.active {
+        display: flex;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.98);
         }
-    </style>
-  </head>
-  <body>
-    <header class="w-full flex justify-between items-center px-4">
-      <h1 class="text-3xl font-bold p-0 border-none m-0 transform rotate(-1deg)">PANKIKICS</h1>
-      <nav id="main-nav" class="main-nav">
-        <a href="#inicio">Inicio</a>
-        <a href="#productos">Productos Destacados</a>
-        <a href="#contactos">Contactos</a>
-      </nav>
-      <div id="menu-toggle" class="menu-icon md:hidden" style="width: 30px; height: 30px; background-color: black; border-radius: 5px;"></div>
-    </header>
-    <main>
-      <section id="inicio">
-        <h2>Bienvenido al Mundo de Pankikics</h2>
-        <p>Somos su destino para productos de alta calidad y una experiencia de compra única. Navegue por nuestra selección y encuentre lo que busca con facilidad.</p>
-        <div class="mt-4 flex flex-col sm:flex-row gap-4">
-            <a href="https://ninyazmax.github.io/catalogo/" class="btn-regresar">Catálogo Completo</a>
-            <a href="#acerca" class="text-center">Saber Más</a>
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .code-block {
+        background-color: #1e1e2e;
+        border: 1px solid var(--border);
+        color: #c0caf5;
+        font-family: var(--font-mono);
+        border-radius: 8px;
+        margin-top: 1rem;
+    }
+
+    .code-block-header {
+        background-color: var(--border);
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .code-block-header span {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+
+    .code-block-header .bg-red-500 { background-color: var(--red); }
+    .code-block-header .bg-yellow-500 { background-color: var(--yellow); }
+    .code-block-header .bg-green-500 { background-color: var(--green); }
+
+    pre {
+        margin: 0;
+        padding: 1rem;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .code-block .language-html .tag,
+    .code-block .language-css .at-rule,
+    .code-block .language-javascript .keyword {
+        color: var(--accent);
+    }
+
+    .code-block .language-html .string,
+    .code-block .language-css .string,
+    .code-block .language-javascript .string {
+        color: var(--green);
+    }
+
+    .code-block .language-css .property,
+    .code-block .language-javascript .property {
+        color: var(--yellow);
+    }
+
+    .code-block .language-html .comment,
+    .code-block .language-css .comment,
+    .code-block .language-javascript .comment {
+        color: #5c6370;
+    }
+
+    .btn-primary {
+        background-color: var(--accent);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--accent-dark);
+    }
+
+    .btn-primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .quiz-option {
+        border: 2px solid var(--border);
+        background-color: transparent;
+        color: var(--foreground);
+        padding: 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: left;
+        width: 100%;
+    }
+
+    .quiz-option:hover:not(.disabled) {
+        border-color: var(--accent);
+        background-color: rgba(122, 162, 247, 0.1);
+    }
+
+    .quiz-option.correct {
+        border-color: var(--green);
+        background-color: rgba(158, 206, 106, 0.1);
+        color: var(--green);
+    }
+
+    .quiz-option.incorrect {
+        border-color: var(--red);
+        background-color: rgba(247, 118, 142, 0.1);
+        color: var(--red);
+    }
+
+    .quiz-option.disabled {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+
+    .level-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .level-icon-wrapper {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid;
+        transition: all 0.3s ease;
+    }
+
+    .level-number {
+        margin-top: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .level-node.locked .level-icon-wrapper {
+        border-color: var(--border);
+        color: var(--border);
+        background-color: transparent;
+    }
+
+    .level-node.unlocked .level-icon-wrapper {
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+
+    .level-node.unlocked:hover .level-icon-wrapper {
+        background-color: var(--accent);
+        color: var(--card-background);
+        transform: scale(1.1);
+    }
+
+    .level-node.completed .level-icon-wrapper {
+        border-color: var(--green);
+        background-color: var(--green);
+        color: var(--card-background);
+    }
+
+    #level-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 32px 16px;
+        width: 100%;
+        max-width: 60rem;
+        margin: 0 auto;
+    }
+
+    .progress-bar-bg {
+        background-color: var(--border);
+        border-radius: 9999px;
+        height: 0.625rem;
+    }
+
+    .progress-bar-fill {
+        background-color: var(--accent);
+        height: 0.625rem;
+        border-radius: 9999px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    /* Estilos para el contenido de la lección */
+    .lesson-content h3 {
+        color: var(--accent);
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .lesson-content ul, .lesson-content ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .lesson-content li {
+        margin-bottom: 0.5rem;
+    }
+
+    .lesson-content code {
+        background-color: rgba(122, 162, 247, 0.1);
+        color: var(--accent);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-family: var(--font-mono);
+        font-size: 0.9em;
+    }
+
+    .lesson-content strong {
+        color: var(--yellow);
+    }
+
+    .lesson-content p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+
+    /* Chat Styles */
+    #chat-messages .user-message {
+        background-color: var(--accent);
+        color: white;
+        margin-left: auto;
+    }
+    #chat-messages .ai-message {
+        background-color: var(--border);
+        color: var(--foreground);
+        margin-right: auto;
+    }
+    .chat-message-bubble {
+        max-width: 80%;
+        padding: 0.75rem;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        line-height: 1.4;
+    }
+</style>
+<body>
+    <!-- Fondo animado -->
+    <div class="background-container">
+        <div class="background-day"></div>
+        <div class="background-night"></div>
+    </div>
+
+    <div class="content-box">
+        <!-- Panel de Selección de Nivel -->
+        <div id="level-selection-panel" class="panel active flex-col items-center justify-center p-4 relative">
+            <button id="theme-toggle" class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-700 transition-colors">
+                <i data-lucide="sun" class="w-6 h-6"></i>
+            </button>
+            <h1 class="text-4xl font-bold mb-2" style="color: var(--accent);">Curso de HTML</h1>
+            <p class="mb-8">Selecciona un nivel para comenzar</p>
+            <div id="level-grid" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-10 gap-4 max-w-4xl"></div>
+            <a href="index.html" class="mt-8 text-sm hover:underline" style="color: var(--accent);">Volver al Menú Principal</a>
         </div>
-      </section>
-      <section id="productos">
-        <h2>Productos Destacados</h2>
-        <p>Cada ítem es seleccionado con cuidado para garantizar su satisfacción.</p>
-        <p>Visite nuestro catálogo completo para ver todas las opciones disponibles.</p>
-      </section>
-      <section id="acerca">
-        <h2>Acerca de Nosotros</h2>
-        <p>Somos una empresa comprometida con la excelencia y la innovación en el comercio electrónico. Nuestro objetivo es proporcionar a nuestros clientes una experiencia de compra segura, conveniente y placentera.</p>
-      </section>
-      <section id="contactos">
-        <h2>Contactos</h2>
-        <p>¿Tiene preguntas o necesita asistencia? Contáctenos a través de los siguientes medios:</p>
-        <ul class="list-disc list-inside mt-2 ml-4">
-          <li>Email: info@pankikics.com</li>
-          <li>Teléfono: +503 1234-5678</li>
-          <li>Dirección: Calle Principal, Ciudad, País</li>
-        </ul>
-      </section>
-      <section id="terminos">
-        <h2>Términos y Condiciones</h2>
-        <p>Al utilizar nuestro sitio web y realizar compras, usted acepta nuestros términos y condiciones. Para más detalles, consulte nuestra política completa.</p>
-      </section>
-    </main>
-    <footer>
-      <p>&copy; 2025 Pankikics. Todos los derechos reservados.</p>
-    </footer>
-    <script>
-      const menuToggle = document.getElementById('menu-toggle');
-      const mainNav = document.getElementById('main-nav');
 
-      menuToggle.addEventListener('click', () => {
-          mainNav.classList.toggle('active');
-      });
+        <!-- Panel de Lección -->
+        <div id="lesson-panel" class="panel flex-col p-4 md:p-8">
+            <div class="flex-grow w-full max-w-4xl mx-auto flex flex-col">
+                <header class="flex items-center justify-between mb-4">
+                    <h2 id="lesson-title" class="text-2xl md:text-3xl font-bold"></h2>
+                    <button id="close-lesson-btn" class="p-2 rounded-full hover:bg-gray-700">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </header>
+                <div class="w-full bg-gray-700 rounded-full h-2.5 mb-6">
+                    <div id="lesson-progress" class="h-2.5 rounded-full" style="width: 10%; background-color: var(--accent);"></div>
+                </div>
+                <div id="lesson-content" class="flex-grow lesson-content max-w-none"></div>
+                <footer class="flex justify-between items-center mt-6">
+                    <button id="prev-btn" class="btn-primary px-6 py-2 rounded-lg font-semibold">Anterior</button>
+                    <span id="lesson-step" class="font-mono">1 / 10</span>
+                    <button id="next-btn" class="btn-primary px-6 py-2 rounded-lg font-semibold">Siguiente</button>
+                </footer>
+            </div>
+        </div>
+        
+        <!-- Panel de Quiz -->
+        <div id="quiz-panel" class="panel flex-col items-center justify-center p-4">
+            <div class="w-full max-w-2xl">
+                <header class="flex justify-between items-center mb-6">
+                    <h2 id="quiz-level-title" class="text-2xl font-bold">Quiz - Nivel 1</h2>
+                    <span id="quiz-progress" class="font-mono text-lg">1/10</span>
+                </header>
+                <p id="quiz-question" class="text-xl md:text-2xl text-center mb-8"></p>
+                <div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </div>
+        </div>
+        
+        <!-- Panel de Resultados del Quiz -->
+        <div id="results-panel" class="panel flex-col items-center justify-center text-center p-4">
+            <h2 id="results-title" class="text-4xl font-bold mb-4"></h2>
+            <p id="results-score" class="text-2xl mb-2"></p>
+            <p id="results-message" class="mb-8"></p>
+            <div class="flex gap-4">
+                <button id="retry-lesson-btn" class="btn-primary px-6 py-3 rounded-lg font-semibold">Repetir Lección</button>
+                <button id="next-level-btn" class="btn-primary px-6 py-3 rounded-lg font-semibold hidden">Siguiente Nivel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Chat Button -->
+    <button id="chat-toggle-btn" class="fixed bottom-6 right-6 p-4 rounded-full shadow-xl z-50 transition-all duration-300 transform hover:scale-110" style="background-color: var(--yellow); color: var(--card-background);">
+        <i data-lucide="message-square" class="w-7 h-7"></i>
+    </button>
+
+    <!-- Chat Modal -->
+    <div id="chat-modal" class="fixed bottom-20 right-6 w-80 h-[450px] rounded-xl shadow-2xl z-50 flex flex-col hidden sm:flex" style="background-color: var(--card-background); border: 1px solid var(--border);">
+        <!-- Chat Header -->
+        <header class="p-3 border-b flex items-center justify-between" style="border-color: var(--border);">
+            <div class="flex items-center">
+                <i data-lucide="sparkles" class="w-5 h-5 mr-2" style="color: var(--yellow);"></i>
+                <h3 class="font-semibold text-lg" style="color: var(--accent);">Asistente de Código</h3>
+            </div>
+            <button id="chat-close-btn" class="p-1 rounded-full hover:bg-gray-700">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </header>
+
+        <!-- Chat Messages Container -->
+        <div id="chat-messages" class="flex-grow p-3 overflow-y-auto space-y-3">
+            <!-- Mensaje de Bienvenida de la IA -->
+            <div class="flex justify-start">
+                <div class="ai-message chat-message-bubble">
+                    Hola. Soy tu Asistente de Código. Pregunta sobre el contenido, la estructura o las etiquetas de HTML que hemos visto en el curso.
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Input Area -->
+        <div class="p-3 border-t" style="border-color: var(--border);">
+            <div class="flex gap-2">
+                <input type="text" id="chat-input" placeholder="Escribe tu pregunta..." class="flex-grow p-2 rounded-lg text-sm focus:ring-0" style="background-color: var(--background); border: 1px solid var(--border); color: var(--foreground);" onkeydown="if(event.key === 'Enter') document.getElementById('chat-send-btn').click()">
+                <button id="chat-send-btn" class="p-2 rounded-lg transition-colors disabled:opacity-50" style="background-color: var(--accent); color: white;">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <p id="chat-loading" class="text-xs text-center mt-1 hidden" style="color: var(--yellow);">Analizando la estructura...</p>
+        </div>
+    </div>
+
+    <script>
+
+            // --- DATOS DEL CURSO ---
+    const courseData = [
+        { // Nivel 1
+            title: "Los Cimientos de la Web",
+            lesson: [
+                {
+                    title: "¿Qué es HTML?",
+                    content: `
+                        <p>HTML son las siglas de <strong>HyperText Markup Language</strong> (Lenguaje de Marcado de Hipertexto). No es un lenguaje de programación, sino un <strong>lenguaje de marcado</strong>. Su única función es darle estructura y significado al contenido de una página web.</p>
+                        <p>Piensa en HTML como el esqueleto de un cuerpo humano. Define dónde va la cabeza, los brazos, las piernas, etc., pero no define su color de piel, ropa o cómo se mueve. Eso lo harán CSS y JavaScript, respectivamente.</p>
+                    `
+                },
+                {
+                    title: "Etiquetas y Elementos",
+                    content: `
+                        <p>HTML funciona mediante <strong>etiquetas</strong> (tags). La mayoría de las etiquetas vienen en pares: una de apertura y una de cierre.</p>
+                        <p>Por ejemplo, <code>&lt;p&gt;</code> es una etiqueta de apertura para un párrafo, y <code>&lt;/p&gt;</code> es su etiqueta de cierre. Todo lo que está entre ellas es el contenido del párrafo.</p>
+                        <p>El conjunto de la etiqueta de apertura, el contenido y la etiqueta de cierre se llama un <strong>elemento HTML</strong>.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;p&gt;Este es el contenido de mi primer párrafo.&lt;/p&gt;</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "La Estructura Básica",
+                    content: `
+                        <p>Toda página HTML tiene una estructura fundamental que incluye estas partes principales:</p>
+                        <ul>
+                            <li><code>&lt;!DOCTYPE html&gt;</code> - Le dice al navegador que estamos usando HTML5</li>
+                            <li><code>&lt;html&gt;</code> - Es la raíz de todo el documento HTML</li>
+                            <li><code>&lt;head&gt;</code> - Contiene metadatos (información para el navegador) como el título, enlaces a CSS, etc.</li>
+                            <li><code>&lt;body&gt;</code> - Contiene todo el contenido visible de la página</li>
+                        </ul>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Mi primera página&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hola Mundo&lt;/h1&gt;
+    &lt;p&gt;Este es mi primer párrafo.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Títulos (Headings)",
+                    content: `
+                        <p>HTML tiene seis niveles de títulos, desde <code>&lt;h1&gt;</code> hasta <code>&lt;h6&gt;</code>. Estas etiquetas definen títulos y subtítulos en tu página.</p>
+                        <p><code>&lt;h1&gt;</code> es el más importante y grande, y <code>&lt;h6&gt;</code> el menos importante y más pequeño. Son cruciales para la organización del contenido y para el SEO (optimización para motores de búsqueda).</p>
+                        <p>Por ejemplo, si tienes un artículo sobre "Cómo hacer pan", tu estructura podría ser:</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;h1&gt;Cómo hacer pan casero&lt;/h1&gt;
+&lt;h2&gt;Ingredientes necesarios&lt;/h2&gt;
+&lt;h3&gt;Para la masa&lt;/h3&gt;
+&lt;h3&gt;Para el relleno&lt;/h3&gt;
+&lt;h2&gt;Pasos a seguir&lt;/h2&gt;
+&lt;h3&gt;Preparación de la masa&lt;/h3&gt;
+&lt;h3&gt;Horneado&lt;/h3&gt;</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Párrafos y Saltos de Línea",
+                    content: `
+                        <p>Ya conoces <code>&lt;p&gt;</code> para párrafos. Si necesitas un salto de línea dentro de un párrafo sin empezar uno nuevo, usas la etiqueta de autocierre <code>&lt;br&gt;</code>.</p>
+                        <p>Por ejemplo, si quieres escribir una dirección donde cada parte esté en una línea diferente dentro del mismo párrafo:</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;p&gt;
+    Calle Principal, 123&lt;br&gt;
+    Ciudad, Estado&lt;br&gt;
+    Código Postal
+&lt;/p&gt;</code></pre>
+                        </div>
+                        <p>Esto mostrará cada parte de la dirección en una línea separada, pero todo dentro del mismo párrafo.</p>
+                    `
+                },
+                {
+                    title: "Enlaces (Links)",
+                    content: `
+                        <p>La etiqueta <code>&lt;a&gt;</code> (anchor) crea hipervínculos. El atributo <code>href</code> especifica la URL de destino.</p>
+                        <p>Por ejemplo: <code>&lt;a href="https://google.com"&gt;Ir a Google&lt;/a&gt;</code> crea un enlace que dice "Ir a Google" y te lleva a Google cuando haces clic.</p>
+                        <p>Puedes crear enlaces a páginas externas, a otras páginas de tu propio sitio, o incluso a secciones específicas dentro de la misma página.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;!-- Enlace a página externa --&gt;
+&lt;a href="https://ejemplo.com"&gt;Visitar Ejemplo.com&lt;/a&gt;
+
+&lt;!-- Enlace a otra página de tu sitio --&gt;
+&lt;a href="contacto.html"&gt;Página de Contacto&lt;/a&gt;
+
+&lt;!-- Enlace a sección específica --&gt;
+&lt;a href="#seccion2"&gt;Ir a la Sección 2&lt;/a&gt;</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Imágenes",
+                    content: `
+                        <p>Con <code>&lt;img&gt;</code> puedes mostrar imágenes. Es una etiqueta de autocierre, lo que significa que no necesita etiqueta de cierre.</p>
+                        <p>Necesita el atributo <code>src</code> (source) para la URL de la imagen y el atributo <code>alt</code> (texto alternativo) por accesibilidad.</p>
+                        <p>Ejemplo: <code>&lt;img src="logo.png" alt="Logo de la empresa"&gt;</code></p>
+                        <p>El texto alternativo (<code>alt</code>) es importante porque:</p>
+                        <ul>
+                            <li>Se muestra si la imagen no puede cargarse</li>
+                            <li>Lo leen los lectores de pantalla para personas con discapacidad visual</li>
+                            <li>Ayuda al SEO (optimización para motores de búsqueda)</li>
+                        </ul>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;img src="foto.jpg" alt="Foto de montañas al atardecer" width="500" height="300"&gt;</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Listas",
+                    content: `
+                        <p>Hay dos tipos principales de listas en HTML:</p>
+                        <ul>
+                            <li><code>&lt;ul&gt;</code> (unordered list) para listas con viñetas</li>
+                            <li><code>&lt;ol&gt;</code> (ordered list) para listas numeradas</li>
+                        </ul>
+                        <p>Cada elemento de la lista se define con <code>&lt;li&gt;</code> (list item).</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;!-- Lista con viñetas --&gt;
+&lt;ul&gt;
+    &lt;li&gt;Manzana&lt;/li&gt;
+    &lt;li&gt;Banana&lt;/li&gt;
+    &lt;li&gt;Naranja&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- Lista numerada --&gt;
+&lt;ol&gt;
+    &lt;li&gt;Precalentar el horno&lt;/li&gt;
+    &lt;li&gt;Mezclar los ingredientes&lt;/li&gt;
+    &lt;li&gt;Hornear por 30 minutos&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Comentarios",
+                    content: `
+                        <p>Puedes dejar notas en tu código que el navegador ignorará. Son útiles para ti y otros desarrolladores.</p>
+                        <p>Se escriben así: <code>&lt;!-- Esto es un comentario --&gt;</code></p>
+                        <p>Los comentarios son útiles para:</p>
+                        <ul>
+                            <li>Explicar qué hace una sección de código</li>
+                            <li>Desactivar temporalmente código sin eliminarlo</li>
+                            <li>Dejar recordatorios para ti mismo o para otros desarrolladores</li>
+                        </ul>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;!-- Este es el encabezado de la página --&gt;
+&lt;header&gt;
+    &lt;h1&gt;Mi Sitio Web&lt;/h1&gt;
+&lt;/header&gt;
+
+&lt;!-- 
+    Este es un comentario multilínea
+    que puede abarcar varias líneas
+--&gt;
+
+&lt;!-- &lt;p&gt;Este párrafo está comentado y no se mostrará&lt;/p&gt; --&gt;</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "¡Listo para el Quiz!",
+                    content: "<p>Has aprendido los fundamentos absolutos de HTML. Ahora, ¡demuestra tus conocimientos en el quiz para desbloquear el siguiente nivel!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Qué significa HTML?", options: ["HyperText Markup Language", "High-Level Textual Machine Language", "Hyperlink and Text Management Language", "Home Tool Markup Language"], answer: "HyperText Markup Language" },
+                { question: "¿Cuál es el propósito principal de HTML?", options: ["Dar estilo a una web", "Añadir interactividad", "Estructurar el contenido", "Gestionar bases de datos"], answer: "Estructurar el contenido" },
+                { question: "¿Qué etiqueta define la estructura básica de una página?", options: ["<head>", "<body>", "<html>", "<!DOCTYPE html>"], answer: "<!DOCTYPE html>" },
+                { question: "¿Cuál es el encabezado más importante?", options: ["<h1>", "<h2>", "<h3>", "<h6>"], answer: "<h1>" },
+                { question: "¿Qué etiqueta crea párrafos?", options: ["<p>", "<div>", "<span>", "<section>"], answer: "<p>" },
+                { question: "¿Qué etiqueta crea enlaces?", options: ["<link>", "<a>", "<href>", "<url>"], answer: "<a>" },
+                { question: "¿Qué atributo especifica la URL de una imagen?", options: ["alt", "src", "href", "link"], answer: "src" },
+                { question: "¿Qué etiqueta crea listas con viñetas?", options: ["<ol>", "<ul>", "<li>", "<dl>"], answer: "<ul>" },
+                { question: "¿Cómo se escriben los comentarios en HTML?", options: ["// comentario", "<!-- comentario -->", "/* comentario */", "# comentario"], answer: "<!-- comentario -->" },
+                { question: "¿Qué etiqueta es autocerrante para saltos de línea?", options: ["<p>", "<br>", "<hr>", "<div>"], answer: "<br>" }
+            ]
+        },
+        { // Nivel 2
+            title: "Etiquetas Básicas",
+            lesson: [
+                {
+                    title: "Encabezados (Headings)",
+                    content: `
+                        <p>Los encabezados organizan el contenido jerárquicamente. Van de <code>&lt;h1&gt;</code> (más importante) a <code>&lt;h6&gt;</code> (menos importante).</p>
+                        <p>Es importante usar los encabezados correctamente para crear una estructura lógica en tu página. No uses encabezados solo para hacer texto más grande; úsalos para organizar el contenido.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;h1&gt;Título Principal&lt;/h1&gt;
+&lt;h2&gt;Subtítulo&lt;/h2&gt;
+&lt;h3&gt;Sección&lt;/h3&gt;</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Párrafos",
+                    content: `
+                        <p>Los párrafos contienen texto normal. Cada párrafo debe estar en su propia etiqueta <code>&lt;p&gt;</code>.</p>
+                        <p>El navegador automáticamente añade un margen arriba y abajo de cada párrafo para separarlos visualmente.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;p&gt;Este es un párrafo de texto. Puede contener varias oraciones y el navegador lo mostrará como un bloque de texto.&lt;/p&gt;
+&lt;p&gt;Este es otro párrafo. El navegador automáticamente añadrá espacio entre este párrafo y el anterior.&lt;/p&gt;</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Listas Ordenadas",
+                    content: `
+                        <p>Las listas ordenadas muestran elementos numerados automáticamente.</p>
+                        <p>Son útiles para mostrar pasos de un proceso, instrucciones, o cualquier lista donde el orden sea importante.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;ol&gt;
+  &lt;li&gt;Primer elemento&lt;/li&gt;
+  &lt;li&gt;Segundo elemento&lt;/li&gt;
+  &lt;li&gt;Tercer elemento&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+                        </div>
+                        <p>Esto se verá como:</p>
+                        <ol style="margin-left: 1.5rem;">
+                            <li>Primer elemento</li>
+                            <li>Segundo elemento</li>
+                            <li>Tercer elemento</li>
+                        </ol>
+                    `
+                },
+                {
+                    title: "Listas Desordenadas",
+                    content: `
+                        <p>Las listas desordenadas muestran elementos con viñetas.</p>
+                        <p>Son útiles para listas donde el orden no es importante, como listas de características, ingredientes, o elementos relacionados.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;ul&gt;
+  &lt;li&gt;Manzana&lt;/li&gt;
+  &lt;li&gt;Banana&lt;/li&gt;
+  &lt;li&gt;Naranja&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+                        </div>
+                        <p>Esto se verá como:</p>
+                        <ul style="margin-left: 1.5rem;">
+                            <li>Manzana</li>
+                            <li>Banana</li>
+                            <li>Naranja</li>
+                        </ul>
+                    `
+                },
+                {
+                    title: "Texto en Línea",
+                    content: `
+                        <p>Elementos como <code>&lt;strong&gt;</code> (negrita), <code>&lt;em&gt;</code> (cursiva), <code>&lt;u&gt;</code> (subrayado).</p>
+                        <p>Estas etiquetas se usan dentro de párrafos u otros elementos de texto para dar énfasis o formato específico a partes del texto.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;p&gt;Este texto es &lt;strong&gt;importante&lt;/strong&gt; y este es &lt;em&gt;cursiva&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;También puedes &lt;u&gt;subrayar texto&lt;/u&gt; cuando sea necesario.&lt;/p&gt;</code></pre>
+                        </div>
+                        <p>Esto se verá como:</p>
+                        <p>Este texto es <strong>importante</strong> y este es <em>cursiva</em>.</p>
+                        <p>También puedes <u>subrayar texto</u> cuando sea necesario.</p>
+                    `
+                },
+                {
+                    title: "Saltos de Línea",
+                    content: `
+                        <p><code>&lt;br&gt;</code> crea saltos de línea sin crear nuevos párrafos.</p>
+                        <p>Es útil cuando quieres forzar un salto de línea en lugares específicos, como en direcciones, poemas, o cuando quieres controlar exactamente dónde termina una línea.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;p&gt;Línea 1&lt;br&gt;Línea 2&lt;/p&gt;</code></pre>
+                        </div>
+                        <p>Esto se verá como:</p>
+                        <p>Línea 1<br>Línea 2</p>
+                    `
+                },
+                {
+                    title: "Entidades HTML",
+                    content: `
+                        <p>Caracteres especiales como &lt; (<), &gt; (>), &amp; (&).</p>
+                        <p>En HTML, algunos caracteres tienen significado especial y no puedes escribirlos directamente. En su lugar, usas "entidades HTML".</p>
+                        <p>Algunas entidades comunes:</p>
+                        <ul>
+                            <li><code>&amp;lt;</code> para <</li>
+                            <li><code>&amp;gt;</code> para ></li>
+                            <li><code>&amp;amp;</code> para &</li>
+                            <li><code>&amp;quot;</code> para "</li>
+                            <li><code>&amp;copy;</code> para ©</li>
+                            <li><code>&amp;nbsp;</code> para un espacio que no se rompe</li>
+                        </ul>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;p&gt;Para escribir &amp;lt;h1&amp;gt; en HTML, necesitas usar entidades.&lt;/p&gt;
+&lt;p&gt;Mi empresa &amp;copy; 2024&lt;/p&gt;
+&lt;p&gt;Juan&amp;nbsp;Pérez (evita que el nombre se separe)&lt;/p&gt;</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Divs y Spans",
+                    content: `
+                        <p><code>&lt;div&gt;</code> es un contenedor de bloque, <code>&lt;span&gt;</code> es en línea.</p>
+                        <p><code>&lt;div&gt;</code> se usa para agrupar elementos y crear secciones en tu página. Es un elemento de bloque, lo que significa que ocupa todo el ancho disponible y crea una nueva línea.</p>
+                        <p><code>&lt;span&gt;</code> se usa para aplicar estilos o manipular pequeñas partes de texto dentro de un elemento. Es un elemento en línea, lo que significa que no crea una nueva línea.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html">&lt;div class="contenedor"&gt;
+  &lt;h2&gt;Título de la sección&lt;/h2&gt;
+  &lt;p&gt;Este es un párrafo dentro de un div.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Este texto tiene una &lt;span class="resaltado"&gt;parte resaltada&lt;/span&gt; usando span.&lt;/p&gt;</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "¡Listo para el Quiz!",
+                    content: "<p>Has aprendido las etiquetas básicas de HTML. ¡Demuestra tus conocimientos!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Cuál es el encabezado más importante?", options: ["h1", "h2", "h3", "h6"], answer: "h1" },
+                { question: "¿Qué etiqueta crea listas numeradas?", options: ["ul", "ol", "li", "dl"], answer: "ol" },
+                { question: "¿Qué etiqueta crea listas con viñetas?", options: ["ul", "ol", "li", "dl"], answer: "ul" },
+                { question: "¿Qué etiqueta hace texto en negrita?", options: ["em", "strong", "b", "bold"], answer: "strong" },
+                { question: "¿Qué etiqueta hace texto en cursiva?", options: ["i", "em", "italic", "cite"], answer: "em" },
+                { question: "¿Qué etiqueta crea saltos de línea?", options: ["p", "br", "hr", "div"], answer: "br" },
+                { question: "¿Cómo se escribe el símbolo < en HTML?", options: ["&lt;", "&gt;", "&amp;lt;", "&amp;gt;"], answer: "&amp;lt;" },
+                { question: "¿Cuál es un contenedor de bloque?", options: ["span", "div", "em", "strong"], answer: "div" },
+                { question: "¿Cuál es un contenedor en línea?", options: ["div", "p", "span", "section"], answer: "span" },
+                { question: "¿Qué entidad representa el símbolo de copyright?", options: ["&copy;", "&copy", "&copyright;", "&c;"], answer: "&copy;" }
+            ]
+        },
+                { // Nivel 3
+            title: "Enlaces e Imágenes",
+            lesson: [
+                {
+                    title: "Enlaces Básicos",
+                    content: `
+                        <p>Los enlaces conectan páginas web usando la etiqueta <code><a></code>.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><a href="https://ejemplo.com">Texto del enlace</a></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Enlaces Internos",
+                    content: `
+                        <p>Enlaces a secciones dentro de la misma página usando <code>id</code>.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><a href="#seccion1">Ir a sección 1</a>
+<h2 id="seccion1">Sección 1</h2></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Enlaces a Email y Teléfono",
+                    content: `
+                        <p>Enlaces especiales para email y llamadas telefónicas.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><a href="mailto:info@ejemplo.com">Enviar email</a>
+<a href="tel:+123456789">Llamar</a></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Target de Enlaces",
+                    content: `
+                        <p>Controla dónde se abre el enlace: <code>_blank</code>, <code>_self</code>, <code>_parent</code>.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><a href="pagina.html" target="_blank">Abrir en nueva pestaña</a></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Imágenes Básicas",
+                    content: `
+                        <p>La etiqueta <code><img></code> muestra imágenes. Siempre necesita <code>src</code> y <code>alt</code>.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><img src="imagen.jpg" alt="Descripción de la imagen"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Atributos de Imagen",
+                    content: `
+                        <p><code>width</code>, <code>height</code>, <code>title</code>, <code>loading</code>.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><img src="foto.jpg" alt="Foto" width="300" height="200" title="Mi foto"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Formatos de Imagen",
+                    content: `
+                        <p>JPEG (fotos), PNG (transparencia), GIF (animaciones), SVG (vectores), WebP (moderno).</p>
+                    `
+                },
+                {
+                    title: "Imágenes Responsive",
+                    content: `
+                        <p>Usa <code>srcset</code> para diferentes tamaños de pantalla.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><img src="imagen.jpg" srcset="imagen-2x.jpg 2x" alt="Imagen"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Mapas de Imagen",
+                    content: `
+                        <p>Áreas clickeables en imágenes usando <code><map></code> y <code><area></code>.</p>
+                    `
+                },
+                {
+                    title: "¡Listo para el Quiz!",
+                    content: "<p>Enlaces e imágenes conectan tu sitio con el mundo. ¡Muestra que sabes usarlos!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Qué etiqueta crea enlaces?", options: ["link", "a", "href", "url"], answer: "a" },
+                { question: "¿Qué atributo especifica la URL del enlace?", options: ["src", "href", "url", "link"], answer: "href" },
+                { question: "¿Qué abre enlaces en nueva pestaña?", options: ["_self", "_blank", "_new", "_window"], answer: "_blank" },
+                { question: "¿Qué etiqueta muestra imágenes?", options: ["picture", "img", "image", "photo"], answer: "img" },
+                { question: "¿Qué atributo es obligatorio en img?", options: ["title", "alt", "width", "src"], answer: "src" },
+                { question: "¿Para qué sirve alt en imágenes?", options: ["Título", "Descripción para accesibilidad", "URL alternativa", "Tamaño"], answer: "Descripción para accesibilidad" },
+                { question: "¿Qué formato soporta animaciones?", options: ["JPEG", "PNG", "GIF", "WebP"], answer: "GIF" },
+                { question: "¿Qué formato es vectorial?", options: ["JPEG", "PNG", "SVG", "WebP"], answer: "SVG" },
+                { question: "¿Qué atributo carga imágenes perezosamente?", options: ["lazy", "loading", "defer", "async"], answer: "loading" },
+                { question: "¿Qué protocolo usan los enlaces de email?", options: ["http", "mailto", "email", "mail"], answer: "mailto" }
+            ]
+        },
+        { // Nivel 4
+            title: "Formularios Básicos",
+            lesson: [
+                {
+                    title: "Estructura de Formulario",
+                    content: `
+                        <p>Los formularios recolectan información del usuario usando <code><form></code>.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><form action="/enviar" method="POST">
+  <!-- campos del formulario -->
+</form></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Campos de Texto",
+                    content: `
+                        <p><code><input type="text"></code> para texto simple, <code>type="password"</code> para contraseñas.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><input type="text" name="nombre" placeholder="Tu nombre">
+<input type="password" name="contrasena"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Áreas de Texto",
+                    content: `
+                        <p><code><textarea></code> para texto multilínea.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><textarea name="mensaje" rows="4" cols="50"></textarea></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Botones",
+                    content: `
+                        <p><code><button></code> para botones personalizables, <code><input type="submit"></code> para enviar.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><button type="submit">Enviar</button>
+<input type="submit" value="Enviar formulario"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Etiquetas y Grupos",
+                    content: `
+                        <p><code><label></code> asocia texto con campos, mejora accesibilidad.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><label for="email">Email:</label>
+<input type="email" id="email" name="email"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Fieldset y Legend",
+                    content: `
+                        <p><code><fieldset></code> agrupa campos relacionados, <code><legend></code> da título al grupo.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><fieldset>
+  <legend>Información Personal</legend>
+  <!-- campos -->
+</fieldset></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Select y Option",
+                    content: `
+                        <p>Menus desplegables para elegir opciones.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><select name="pais">
+  <option value="es">España</option>
+  <option value="mx">México</option>
+</select></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Checkbox y Radio",
+                    content: `
+                        <p><code>type="checkbox"</code> para múltiples selecciones, <code>type="radio"</code> para selección única.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><input type="checkbox" name="hobbies" value="lectura">
+<input type="radio" name="genero" value="masculino"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Validación Básica",
+                    content: `
+                        <p>Atributos como <code>required</code>, <code>minlength</code>, <code>pattern</code>.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><input type="email" required>
+<input type="text" minlength="3" pattern="[A-Za-z]+"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "¡Listo para el Quiz!",
+                    content: "<p>Los formularios recolectan datos del usuario. ¡Muestra que sabes crearlos!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Qué etiqueta crea formularios?", options: ["form", "input", "div", "section"], answer: "form" },
+                { question: "¿Qué método envía datos?", options: ["GET", "POST", "Ambos", "Ninguno"], answer: "Ambos" },
+                { question: "¿Qué tipo de input oculta texto?", options: ["text", "password", "hidden", "email"], answer: "password" },
+                { question: "¿Qué etiqueta crea áreas de texto multilínea?", options: ["input", "textarea", "text", "paragraph"], answer: "textarea" },
+                { question: "¿Qué atributo asocia label con input?", options: ["name", "for", "id", "label"], answer: "for" },
+                { question: "¿Qué etiqueta agrupa campos relacionados?", options: ["div", "fieldset", "section", "group"], answer: "fieldset" },
+                { question: "¿Qué tipo permite múltiples selecciones?", options: ["radio", "checkbox", "select", "text"], answer: "checkbox" },
+                { question: "¿Qué tipo permite una sola selección?", options: ["checkbox", "radio", "select", "text"], answer: "radio" },
+                { question: "¿Qué atributo hace un campo obligatorio?", options: ["required", "mandatory", "needed", "must"], answer: "required" },
+                { question: "¿Qué método es más seguro para formularios?", options: ["GET", "POST", "Ambos igual", "Ninguno"], answer: "POST" }
+            ]
+        },
+        { // Nivel 5
+            title: "Tablas",
+            lesson: [
+                {
+                    title: "Estructura Básica",
+                    content: `
+                        <p>Las tablas organizan datos en filas y columnas usando <code><table></code>.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><table>
+  <tr>
+    <th>Nombre</th>
+    <th>Edad</th>
+  </tr>
+  <tr>
+    <td>Ana</td>
+    <td>25</td>
+  </tr>
+</table></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Encabezados de Tabla",
+                    content: `
+                        <p><code><th></code> define encabezados de columna o fila (negrita y centrado por defecto).</p>
+                    `
+                },
+                {
+                    title: "Datos de Tabla",
+                    content: `
+                        <p><code><td></code> contiene los datos de cada celda.</p>
+                    `
+                },
+                {
+                    title: "Filas de Encabezado",
+                    content: `
+                        <p><code><thead></code> agrupa las filas de encabezado.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><thead>
+  <tr>
+    <th>Producto</th>
+    <th>Precio</th>
+  </tr>
+</thead></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Cuerpo de Tabla",
+                    content: `
+                        <p><code><tbody></code> contiene las filas de datos principales.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><tbody>
+  <tr>
+    <td>Manzana</td>
+    <td>$1.50</td>
+  </tr>
+</tbody></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Pie de Tabla",
+                    content: `
+                        <p><code><tfoot></code> contiene resúmenes o totales.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><tfoot>
+  <tr>
+    <td>Total</td>
+    <td>$10.00</td>
+  </tr>
+</tfoot></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Celdas que Abran Columnas",
+                    content: `
+                        <p><code>colspan</code> hace que una celda abarque múltiples columnas.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><td colspan="2">Título que abarca dos columnas</td></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Celdas que Abran Filas",
+                    content: `
+                        <p><code>rowspan</code> hace que una celda abarque múltiples filas.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><td rowspan="2">Celda que abarca dos filas</td></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Caption",
+                    content: `
+                        <p><code><caption></code> añade un título descriptivo a la tabla.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><caption>Ventas del Mes</caption></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "¡Listo para el Quiz!",
+                    content: "<p>Las tablas organizan datos complejos. ¡Muestra que sabes estructurarlas!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Qué etiqueta crea tablas?", options: ["table", "tab", "grid", "matrix"], answer: "table" },
+                { question: "¿Qué etiqueta define encabezados?", options: ["td", "th", "tr", "tc"], answer: "th" },
+                { question: "¿Qué etiqueta define datos de celda?", options: ["th", "td", "tr", "tc"], answer: "td" },
+                { question: "¿Qué etiqueta define filas?", options: ["td", "th", "tr", "tc"], answer: "tr" },
+                { question: "¿Qué etiqueta agrupa encabezados?", options: ["thead", "tbody", "tfoot", "tgroup"], answer: "thead" },
+                { question: "¿Qué etiqueta agrupa datos principales?", options: ["thead", "tbody", "tfoot", "tgroup"], answer: "tbody" },
+                { question: "¿Qué atributo hace que una celda abarque múltiples columnas?", options: ["colspan", "rowspan", "span", "merge"], answer: "colspan" },
+                { question: "¿Qué atributo hace que una celda abarque múltiples filas?", options: ["colspan", "rowspan", "span", "merge"], answer: "rowspan" },
+                { question: "¿Qué etiqueta añade título a la tabla?", options: ["title", "caption", "header", "label"], answer: "caption" },
+                { question: "¿Qué etiqueta agrupa el pie de tabla?", options: ["thead", "tbody", "tfoot", "tgroup"], answer: "tfoot" }
+            ]
+        },
+        { // Nivel 6
+            title: "Elementos Semánticos",
+            lesson: [
+                {
+                    title: "Qué es la Semántica",
+                    content: `
+                        <p>La semántica da significado a los elementos HTML, mejorando accesibilidad y SEO.</p>
+                    `
+                },
+                {
+                    title: "Header",
+                    content: `
+                        <p><code><header></code> representa la cabecera de una sección o página.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><header>
+  <h1>Título de la Página</h1>
+  <nav>...</nav>
+</header></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Nav",
+                    content: `
+                        <p><code><nav></code> contiene enlaces de navegación principales.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><nav>
+  <a href="/">Inicio</a>
+  <a href="/productos">Productos</a>
+</nav></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Main",
+                    content: `
+                        <p><code><main></code> contiene el contenido principal de la página.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><main>
+  <article>...</article>
+  <section>...</section>
+</main></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Article",
+                    content: `
+                        <p><code><article></code> representa contenido independiente como artículos de blog.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><article>
+  <h2>Título del Artículo</h2>
+  <p>Contenido del artículo...</p>
+</article></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Section",
+                    content: `
+                        <p><code><section></code> agrupa contenido relacionado temáticamente.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><section>
+  <h2>Sección de Noticias</h2>
+  <article>...</article>
+</section></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Aside",
+                    content: `
+                        <p><code><aside></code> contiene contenido relacionado pero no principal (sidebar).</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><aside>
+  <h3>Enlaces Relacionados</h3>
+  <ul>...</ul>
+</aside></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Footer",
+                    content: `
+                        <p><code><footer></code> contiene información final como derechos de autor.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><footer>
+  <p>&copy; 2024 Mi Sitio</p>
+</footer></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Figure y Figcaption",
+                    content: `
+                        <p><code><figure></code> contiene imágenes/diagramas con <code><figcaption></code> para descripciones.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><figure>
+  <img src="diagrama.jpg" alt="Diagrama">
+  <figcaption>Figura 1: Arquitectura del Sistema</figcaption>
+</figure></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "¡Listo para el Quiz!",
+                    content: "<p>Los elementos semánticos mejoran la estructura y accesibilidad. ¡Muestra que sabes usarlos!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Qué es la semántica en HTML?", options: ["Estilos visuales", "Significado de los elementos", "Funcionalidad JavaScript", "Optimización de imágenes"], answer: "Significado de los elementos" },
+                { question: "¿Qué etiqueta representa la cabecera?", options: ["head", "header", "top", "banner"], answer: "header" },
+                { question: "¿Qué etiqueta contiene navegación principal?", options: ["menu", "nav", "links", "navigation"], answer: "nav" },
+                { question: "¿Qué etiqueta contiene contenido principal?", options: ["body", "main", "content", "primary"], answer: "main" },
+                { question: "¿Qué etiqueta representa artículos independientes?", options: ["section", "article", "div", "post"], answer: "article" },
+                { question: "¿Qué etiqueta agrupa contenido relacionado?", options: ["article", "section", "div", "group"], answer: "section" },
+                { question: "¿Qué etiqueta es para contenido secundario?", options: ["sidebar", "aside", "secondary", "side"], answer: "aside" },
+                { question: "¿Qué etiqueta representa el pie de página?", options: ["bottom", "footer", "end", "copyright"], answer: "footer" },
+                { question: "¿Qué etiqueta combina imágenes con descripciones?", options: ["picture", "figure", "image", "media"], answer: "figure" },
+                { question: "¿Para qué sirve figcaption?", options: ["Título de figura", "Descripción de imagen", "Pie de foto", "Todas las anteriores"], answer: "Todas las anteriores" }
+            ]
+        },
+        { // Nivel 7
+            title: "Audio y Video",
+            lesson: [
+                {
+                    title: "Etiqueta Audio",
+                    content: `
+                        <p><code><audio></code> reproduce archivos de sonido.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><audio controls>
+  <source src="musica.mp3" type="audio/mpeg">
+  <source src="musica.ogg" type="audio/ogg">
+  Tu navegador no soporta audio.
+</audio></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Controles de Audio",
+                    content: `
+                        <p>Atributos: <code>controls</code>, <code>autoplay</code>, <code>loop</code>, <code>muted</code>.</p>
+                    `
+                },
+                {
+                    title: "Etiqueta Video",
+                    content: `
+                        <p><code><video></code> reproduce archivos de video.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><video controls width="640" height="360">
+  <source src="video.mp4" type="video/mp4">
+  <source src="video.webm" type="video/webm">
+  Tu navegador no soporta video.
+</video></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Controles de Video",
+                    content: `
+                        <p>Atributos: <code>controls</code>, <code>autoplay</code>, <code>loop</code>, <code>muted</code>, <code>poster</code>.</p>
+                    `
+                },
+                {
+                    title: "Subtítulos y Pistas",
+                    content: `
+                        <p><code><track></code> añade subtítulos, capítulos, descripciones.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><video controls>
+  <source src="video.mp4">
+  <track src="subtitulos.vtt" kind="subtitles" srclang="es" label="Español">
+</video></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Picture Element",
+                    content: `
+                        <p><code><picture></code> permite imágenes responsivas con diferentes fuentes.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><picture>
+  <source media="(max-width: 768px)" srcset="imagen-pequena.jpg">
+  <source media="(min-width: 769px)" srcset="imagen-grande.jpg">
+  <img src="imagen-grande.jpg" alt="Imagen">
+</picture></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Source Element",
+                    content: `
+                        <p><code><source></code> especifica múltiples formatos para audio/video.</p>
+                    `
+                },
+                {
+                    title: "Formatos Soportados",
+                    content: `
+                        <p>Audio: MP3, OGG, WAV. Video: MP4, WebM, OGV.</p>
+                    `
+                },
+                {
+                    title: "Accesibilidad",
+                    content: `
+                        <p>Texto alternativo para audio/video, controles accesibles.</p>
+                    `
+                },
+                {
+                    title: "¡Listo para el Quiz!",
+                    content: "<p>Audio y video enriquecen la experiencia web. ¡Muestra que sabes implementarlos!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Qué etiqueta reproduce audio?", options: ["sound", "audio", "music", "play"], answer: "audio" },
+                { question: "¿Qué etiqueta reproduce video?", options: ["movie", "video", "film", "media"], answer: "video" },
+                { question: "¿Qué atributo muestra controles?", options: ["controls", "show", "visible", "display"], answer: "controls" },
+                { question: "¿Qué atributo reproduce automáticamente?", options: ["auto", "autoplay", "start", "play"], answer: "autoplay" },
+                { question: "¿Qué etiqueta permite imágenes responsivas?", options: ["img", "picture", "responsive", "source"], answer: "picture" },
+                { question: "¿Qué etiqueta especifica fuentes alternativas?", options: ["source", "alt", "option", "media"], answer: "source" },
+                { question: "¿Qué etiqueta añade subtítulos?", options: ["subtitle", "track", "caption", "text"], answer: "track" },
+                { question: "¿Qué formato de video es moderno?", options: ["AVI", "WebM", "MOV", "WMV"], answer: "WebM" },
+                { question: "¿Qué formato de audio es universal?", options: ["WAV", "MP3", "FLAC", "AAC"], answer: "MP3" },
+                { question: "¿Qué atributo establece imagen previa de video?", options: ["preview", "poster", "thumbnail", "image"], answer: "poster" }
+            ]
+        },
+        { // Nivel 8
+            title: "Canvas y SVG",
+            lesson: [
+                {
+                    title: "Canvas Básico",
+                    content: `
+                        <p><code><canvas></code> permite dibujar gráficos usando JavaScript.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><canvas id="miCanvas" width="400" height="200">
+  Tu navegador no soporta canvas.
+</canvas></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Contexto de Canvas",
+                    content: `
+                        <p>Obtén el contexto 2D para dibujar.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-javascript">const canvas = document.getElementById("miCanvas");
+const ctx = canvas.getContext("2d");</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Dibujando en Canvas",
+                    content: `
+                        <p>Métodos básicos: rectángulos, líneas, círculos, texto.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-javascript">ctx.fillRect(50, 50, 100, 50); // Rectángulo
+ctx.strokeRect(200, 50, 100, 50); // Contorno</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "SVG Básico",
+                    content: `
+                        <p>SVG (Scalable Vector Graphics) crea gráficos vectoriales escalables.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><svg width="100" height="100">
+  <circle cx="50" cy="50" r="40" fill="blue"/>
+</svg></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Formas SVG",
+                    content: `
+                        <p><code><rect></code>, <code><circle></code>, <code><ellipse></code>, <code><line></code>, <code><polygon></code>.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><svg>
+  <rect x="10" y="10" width="80" height="40" fill="red"/>
+  <circle cx="50" cy="70" r="20" fill="green"/>
+</svg></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Texto en SVG",
+                    content: `
+                        <p><code><text></code> añade texto escalable.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><svg>
+  <text x="10" y="30" font-size="20">Hola SVG</text>
+</svg></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Paths en SVG",
+                    content: `
+                        <p><code><path></code> crea formas complejas usando comandos de dibujo.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><svg>
+  <path d="M10 10 L90 10 L50 90 Z" fill="purple"/>
+</svg></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Animaciones SVG",
+                    content: `
+                        <p>SVG soporta animaciones CSS y SMIL.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><svg>
+  <circle cx="50" cy="50" r="40">
+    <animate attributeName="r" values="40;50;40" dur="2s" repeatCount="indefinite"/>
+  </circle>
+</svg></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Canvas vs SVG",
+                    content: `
+                        <p>Canvas para gráficos dinámicos, SVG para gráficos escalables y animaciones simples.</p>
+                    `
+                },
+                {
+                    title: "¡Listo para el Quiz!",
+                    content: "<p>Canvas y SVG permiten gráficos avanzados. ¡Muestra que sabes crearlos!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Qué etiqueta permite dibujar con JavaScript?", options: ["svg", "canvas", "draw", "graphics"], answer: "canvas" },
+                { question: "¿Qué etiqueta crea gráficos vectoriales?", options: ["canvas", "svg", "vector", "draw"], answer: "svg" },
+                { question: "¿Qué método obtiene contexto 2D de canvas?", options: ["getContext", "getCanvas", "createContext", "initContext"], answer: "getContext" },
+                { question: "¿Qué forma SVG es un círculo?", options: ["rect", "circle", "square", "ellipse"], answer: "circle" },
+                { question: "¿Qué etiqueta SVG crea texto?", options: ["label", "text", "span", "paragraph"], answer: "text" },
+                { question: "¿Qué etiqueta SVG crea formas complejas?", options: ["shape", "path", "polygon", "complex"], answer: "path" },
+                { question: "¿Qué atributo define comandos de path?", options: ["commands", "d", "path", "draw"], answer: "d" },
+                { question: "¿Qué es mejor para gráficos dinámicos?", options: ["SVG", "Canvas", "Ambos igual", "Ninguno"], answer: "Canvas" },
+                { question: "¿Qué es mejor para gráficos escalables?", options: ["Canvas", "SVG", "Ambos igual", "Ninguno"], answer: "SVG" },
+                { question: "¿Qué etiqueta anima elementos SVG?", options: ["animate", "animation", "motion", "transform"], answer: "animate" }
+            ]
+        },
+        { // Nivel 9
+            title: "Formularios Avanzados",
+            lesson: [
+                {
+                    title: "Tipos de Input HTML5",
+                    content: `
+                        <p>Nuevos tipos: email, url, tel, number, range, date, time, color, search.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><input type="email" name="correo" required>
+<input type="number" name="edad" min="18" max="100">
+<input type="date" name="fecha"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Datalist",
+                    content: `
+                        <p><code><datalist></code> proporciona opciones predefinidas para inputs.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><input type="text" list="colores">
+<datalist id="colores">
+  <option value="Rojo">
+  <option value="Azul">
+</datalist></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Progress y Meter",
+                    content: `
+                        <p><code><progress></code> muestra progreso de tareas, <code><meter></code> mide valores.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><progress value="70" max="100">70%</progress>
+<meter value="0.7" min="0" max="1">70%</meter></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Output Element",
+                    content: `
+                        <p><code><output></code> muestra resultados de cálculos.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><output id="resultado">0</output></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Validación Avanzada",
+                    content: `
+                        <p>Atributos: pattern, min, max, step, novalidate.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><input type="text" pattern="[A-Za-z]+" title="Solo letras">
+<input type="range" min="0" max="100" step="10"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Mensajes de Validación",
+                    content: `
+                        <p>Personaliza mensajes con <code>setCustomValidity()</code>.</p>
+                    `
+                },
+                {
+                    title: "Formularios Múltiples",
+                    content: `
+                        <p>Múltiples formularios en una página con diferentes acciones.</p>
+                    `
+                },
+                {
+                    title: "Accesibilidad en Formularios",
+                    content: `
+                        <p>ARIA labels, descripciones, relaciones entre elementos.</p>
+                    `
+                },
+                {
+                    title: "Envío Asíncrono",
+                    content: `
+                        <p>Usar FormData y Fetch para envío sin recargar página.</p>
+                    `
+                },
+                {
+                    title: "¡Listo para el Quiz!",
+                    content: "<p>Los formularios avanzados mejoran la experiencia del usuario. ¡Muestra que sabes crearlos!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Qué tipo de input valida emails?", options: ["text", "email", "mail", "address"], answer: "email" },
+                { question: "¿Qué tipo de input crea selectores de fecha?", options: ["date", "calendar", "time", "datetime"], answer: "date" },
+                { question: "¿Qué tipo de input crea selectores de color?", options: ["color", "picker", "palette", "rgb"], answer: "color" },
+                { question: "¿Qué etiqueta proporciona opciones para input?", options: ["options", "datalist", "suggestions", "autocomplete"], answer: "datalist" },
+                { question: "¿Qué etiqueta muestra progreso?", options: ["progress", "meter", "bar", "status"], answer: "progress" },
+                { question: "¿Qué etiqueta mide valores conocidos?", options: ["progress", "meter", "gauge", "measure"], answer: "meter" },
+                { question: "¿Qué etiqueta muestra resultados de cálculos?", options: ["result", "output", "display", "show"], answer: "output" },
+                { question: "¿Qué atributo define patrones de validación?", options: ["regex", "pattern", "validation", "rule"], answer: "pattern" },
+                { question: "¿Qué atributo desactiva validación HTML?", options: ["novalidate", "no-validation", "disable-validation", "skip-validation"], answer: "novalidate" },
+                { question: "¿Qué tipo de input crea sliders?", options: ["slider", "range", "scroll", "bar"], answer: "range" }
+            ]
+        },
+        { // Nivel 10
+            title: "Meta Tags y SEO",
+            lesson: [
+                {
+                    title: "Meta Charset",
+                    content: `
+                        <p>Define la codificación de caracteres.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><meta charset="UTF-8"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Meta Viewport",
+                    content: `
+                        <p>Controla cómo se ve la página en dispositivos móviles.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><meta name="viewport" content="width=device-width, initial-scale=1.0"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Meta Description",
+                    content: `
+                        <p>Descripción que aparece en resultados de búsqueda.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><meta name="description" content="Descripción de la página para SEO"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Meta Keywords",
+                    content: `
+                        <p>Palabras clave para motores de búsqueda (menos usado actualmente).</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><meta name="keywords" content="palabra1, palabra2, palabra3"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Meta Author",
+                    content: `
+                        <p>Especifica el autor de la página.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><meta name="author" content="Nombre del Autor"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Open Graph",
+                    content: `
+                        <p>Meta tags para redes sociales (Facebook, Twitter, etc.).</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><meta property="og:title" content="Título para redes sociales">
+<meta property="og:image" content="imagen-compartir.jpg"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Twitter Cards",
+                    content: `
+                        <p>Meta tags específicos para Twitter.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Título para Twitter"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Canonical URL",
+                    content: `
+                        <p>Especifica la URL canónica para evitar contenido duplicado.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><link rel="canonical" href="https://ejemplo.com/pagina-principal"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Robots Meta",
+                    content: `
+                        <p>Controla cómo los motores de búsqueda indexan la página.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><meta name="robots" content="index, follow"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "¡Listo para el Quiz!",
+                    content: "<p>Los meta tags optimizan tu sitio para motores de búsqueda y redes sociales. ¡Muestra que sabes optimizar!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Qué meta tag define la codificación?", options: ["charset", "encoding", "language", "format"], answer: "charset" },
+                { question: "¿Qué meta tag controla el viewport móvil?", options: ["viewport", "mobile", "responsive", "device"], answer: "viewport" },
+                { question: "¿Qué meta tag describe la página para búsquedas?", options: ["title", "description", "summary", "abstract"], answer: "description" },
+                { question: "¿Qué meta tag especifica palabras clave?", options: ["keywords", "tags", "search-terms", "terms"], answer: "keywords" },
+                { question: "¿Qué meta tag indica el autor?", options: ["creator", "author", "writer", "owner"], answer: "author" },
+                { question: "¿Qué protocolo usan las meta tags de Open Graph?", options: ["og:", "fb:", "social:", "share:"], answer: "og:" },
+                { question: "¿Qué meta tag es específico para Twitter?", options: ["twitter:", "tw:", "t:", "bird:"], answer: "twitter:" },
+                { question: "¿Qué etiqueta link especifica URL canónica?", options: ["canonical", "original", "main", "primary"], answer: "canonical" },
+                { question: "¿Qué meta tag controla indexación por robots?", options: ["robots", "index", "search", "crawl"], answer: "robots" },
+                { question: "¿Qué significa 'index, follow' en robots?", options: ["Indexar y seguir enlaces", "No indexar pero seguir", "Indexar pero no seguir", "No hacer nada"], answer: "Indexar y seguir enlaces" }
+            ]
+        },
+        { // Nivel 11
+            title: "Accesibilidad",
+            lesson: [
+                { title: "Qué es la Accesibilidad Web", content: `<p>Hacer que los sitios web sean utilizables por personas con discapacidades.</p>` },
+                { title: "Atributo Alt", content: `<p>Texto alternativo para imágenes, esencial para lectores de pantalla.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-html"><img src="foto.jpg" alt="Juan sonriendo en la playa"></code></pre></div>` },
+                { title: "Etiquetas ARIA", content: `<p>Atributos que mejoran la accesibilidad: role, aria-label, aria-describedby.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-html"><div role="navigation" aria-label="Menú principal"></code></pre></div>` },
+                { title: "Contraste de Colores", content: `<p>Asegurar que texto e imágenes tengan suficiente contraste.</p>` },
+                { title: "Navegación por Teclado", content: `<p>Todos los elementos interactivos deben ser accesibles vía teclado.</p>` },
+                { title: "Etiquetas Semánticas", content: `<p>Usar las etiquetas correctas ayuda a lectores de pantalla.</p>` },
+                { title: "Formularios Accesibles", content: `<p>Labels, fieldsets, descripciones de errores.</p>` },
+                { title: "Enlaces Descriptivos", content: `<p>Texto de enlaces debe explicar claramente el destino.</p>` },
+                { title: "Multimedia Accesible", content: `<p>Subtítulos, transcripciones, controles accesibles.</p>` },
+                { title: "¡Listo para el Quiz!", content: "<p>La accesibilidad hace la web inclusiva. ¡Muestra que sabes hacer sitios accesibles!</p>" }
+            ],
+            quiz: [
+                { question: "¿Qué atributo proporciona texto alternativo para imágenes?", options: ["title", "alt", "description", "text"], answer: "alt" },
+                { question: "¿Qué etiqueta ARIA define el rol de un elemento?", options: ["role", "aria-role", "type", "class"], answer: "role" },
+                { question: "¿Qué proporciona aria-label?", options: ["Etiqueta visible", "Etiqueta accesible", "Descripción", "Título"], answer: "Etiqueta accesible" },
+                { question: "¿Por qué es importante el contraste de colores?", options: ["Mejora diseño", "Ayuda a daltónicos", "Reduce tamaño", "Acelera carga"], answer: "Ayuda a daltónicos" },
+                { question: "¿Qué debe ser accesible por teclado?", options: ["Solo enlaces", "Solo botones", "Todos los elementos interactivos", "Solo formularios"], answer: "Todos los elementos interactivos" },
+                { question: "¿Qué ayudan las etiquetas semánticas?", options: ["Solo diseño", "Lectores de pantalla", "Solo SEO", "Solo velocidad"], answer: "Lectores de pantalla" },
+                { question: "¿Qué necesitan los formularios accesibles?", options: ["Solo placeholders", "Labels y descripciones", "Solo colores", "Solo JavaScript"], answer: "Labels y descripciones" },
+                { question: "¿Qué deben tener los enlaces descriptivos?", options: ["URLs largas", "Texto claro del destino", "Solo 'click aquí'", "Solo imágenes"], answer: "Texto claro del destino" },
+                { question: "¿Qué necesitan los videos accesibles?", options: ["Solo autoplay", "Subtítulos y controles", "Solo música", "Solo imágenes"], answer: "Subtítulos y controles" },
+                { question: "¿Qué estándar define accesibilidad web?", options: ["WCAG", "HTML5", "CSS3", "JavaScript"], answer: "WCAG" }
+            ]
+        },
+        { // Nivel 12
+            title: "HTML5 APIs",
+            lesson: [
+                { title: "Geolocation API", content: `<p>Obtiene la ubicación del usuario.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-javascript">navigator.geolocation.getCurrentPosition(success, error);</code></pre></div>` },
+                { title: "Local Storage", content: `<p>Almacena datos en el navegador persistentemente.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-javascript">localStorage.setItem("clave", "valor");
+const valor = localStorage.getItem("clave");</code></pre></div>` },
+                { title: "Session Storage", content: `<p>Almacena datos durante la sesión del navegador.</p>` },
+                { title: "Web Workers", content: `<p>Ejecuta scripts en segundo plano sin bloquear la UI.</p>` },
+                { title: "Drag and Drop", content: `<p>Permite arrastrar y soltar elementos.</p>` },
+                { title: "File API", content: `<p>Permite leer archivos del usuario.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-html"><input type="file" id="archivo"></code></pre></div>` },
+                { title: "WebSockets", content: `<p>Comunicación bidireccional con servidor.</p>` },
+                { title: "Notifications API", content: `<p>Muestra notificaciones del sistema.</p>` },
+                { title: "Intersection Observer", content: `<p>Detecta cuando elementos entran/salen del viewport.</p>` },
+                { title: "¡Listo para el Quiz!", content: "<p>Las APIs del navegador expanden las capacidades web. ¡Muestra que sabes usarlas!</p>" }
+            ],
+            quiz: [
+                { question: "¿Qué API obtiene ubicación del usuario?", options: ["Location", "Geolocation", "GPS", "Position"], answer: "Geolocation" },
+                { question: "¿Qué método almacena datos persistentemente?", options: ["sessionStorage", "localStorage", "cookies", "cache"], answer: "localStorage" },
+                { question: "¿Qué API ejecuta scripts en segundo plano?", options: ["Background API", "Web Workers", "Async API", "Thread API"], answer: "Web Workers" },
+                { question: "¿Qué API permite arrastrar y soltar?", options: ["Drag Drop", "Drag and Drop", "DnD", "Move API"], answer: "Drag and Drop" },
+                { question: "¿Qué API lee archivos del usuario?", options: ["File Reader", "File API", "Input API", "Upload API"], answer: "File API" },
+                { question: "¿Qué permite WebSockets?", options: ["Comunicación unidireccional", "Comunicación bidireccional", "Solo descarga", "Solo subida"], answer: "Comunicación bidireccional" },
+                { question: "¿Qué API muestra notificaciones del sistema?", options: ["Alert API", "Notification API", "Message API", "Popup API"], answer: "Notification API" },
+                { question: "¿Qué observa Intersection Observer?", options: ["Clicks", "Scroll", "Visibilidad de elementos", "Teclas"], answer: "Visibilidad de elementos" },
+                { question: "¿Qué dura más tiempo: localStorage o sessionStorage?", options: ["Igual duración", "localStorage", "sessionStorage", "Depende del navegador"], answer: "localStorage" },
+                { question: "¿Para qué sirven los Web Workers?", options: ["Mejorar UI", "Ejecutar en segundo plano", "Mejorar SEO", "Reducir CSS"], answer: "Ejecutar en segundo plano" }
+            ]
+        },
+        { // Nivel 13
+            title: "Web Components",
+            lesson: [
+                { title: "Qué son los Web Components", content: `<p>Tecnología para crear elementos HTML reutilizables y encapsulados.</p>` },
+                { title: "Custom Elements", content: `<p>Crear nuevas etiquetas HTML personalizadas.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-javascript">class MiComponente extends HTMLElement {
+    connectedCallback() {
+        this.innerHTML = "<h1>¡Hola!</h1>";
+    }
+}
+customElements.define("mi-componente", MiComponente);</code></pre></div>` },
+                { title: "Shadow DOM", content: `<p>Encapsula el DOM interno del componente.</p>` },
+                { title: "HTML Templates", content: `<p><code><template></code> define fragmentos de HTML reutilizables.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-html"><template id="mi-template">
+  <p>Contenido reutilizable</p>
+</template></code></pre></div>` },
+                { title: "Slots", content: `<p>Permiten contenido personalizado dentro de componentes.</p>` },
+                { title: "Atributos Personalizados", content: `<p>Pasar datos a componentes personalizados.</p>` },
+                { title: "Ciclo de Vida", content: `<p>Métodos como connectedCallback, disconnectedCallback.</p>` },
+                { title: "Estilos Encapsulados", content: `<p>Estilos que no afectan fuera del componente.</p>` },
+                { title: "Composición", content: `<p>Usar componentes dentro de otros componentes.</p>` },
+                { title: "¡Listo para el Quiz!", content: "<p>Los Web Components permiten crear elementos reutilizables. ¡Muestra que sabes crearlos!</p>" }
+            ],
+            quiz: [
+                { question: "¿Qué permite crear nuevas etiquetas HTML?", options: ["Custom Elements", "Shadow DOM", "Templates", "Slots"], answer: "Custom Elements" },
+                { question: "¿Qué encapsula el DOM interno?", options: ["Custom Elements", "Shadow DOM", "Templates", "Slots"], answer: "Shadow DOM" },
+                { question: "¿Qué etiqueta define fragmentos reutilizables?", options: ["template", "fragment", "reusable", "component"], answer: "template" },
+                { question: "¿Qué permite contenido personalizado en componentes?", options: ["props", "slots", "children", "content"], answer: "slots" },
+                { question: "¿Qué método se ejecuta cuando el componente se conecta?", options: ["init", "connectedCallback", "onMount", "ready"], answer: "connectedCallback" },
+                { question: "¿Qué método se ejecuta cuando el componente se desconecta?", options: ["disconnectedCallback", "onUnmount", "destroy", "remove"], answer: "disconnectedCallback" },
+                { question: "¿Qué aíslan los estilos encapsulados?", options: ["Solo el componente", "Toda la página", "Solo el navegador", "Solo el servidor"], answer: "Solo el componente" },
+                { question: "¿Qué es la composición en Web Components?", options: ["Mezclar colores", "Usar componentes dentro de otros", "Crear estilos", "Definir atributos"], answer: "Usar componentes dentro de otros" },
+                { question: "¿Qué extensión tienen los archivos de componentes?", options: [".html", ".js", ".wc", ".component"], answer: ".js" },
+                { question: "¿Para qué sirven los Web Components?", options: ["Crear sitios web", "Crear elementos reutilizables", "Crear servidores", "Crear bases de datos"], answer: "Crear elementos reutilizables" }
+            ]
+        },
+        { // Nivel 14
+            title: "HTML Responsive",
+            lesson: [
+                { title: "Viewport Meta Tag", content: `<p>Esencial para diseño responsivo.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-html"><meta name="viewport" content="width=device-width, initial-scale=1.0"></code></pre></div>` },
+                { title: "Imágenes Responsivas", content: `<p><code>srcset</code> y <code>sizes</code> para diferentes pantallas.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-html"><img src="imagen.jpg" srcset="imagen-2x.jpg 2x" alt="Imagen"></code></pre></div>` },
+                { title: "Picture Element", content: `<p>Diferentes imágenes según condiciones.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-html"><picture>
+  <source media="(max-width: 768px)" srcset="movil.jpg">
+  <img src="desktop.jpg" alt="Imagen">
+</picture></code></pre></div>` },
+                { title: "Tablas Responsivas", content: `<p><code><div></code> contenedor con scroll horizontal.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-html"><div style="overflow-x: auto;">
+  <table>...</table>
+</div></code></pre></div>` },
+                { title: "Texto Fluido", content: `<p>Unidades relativas para texto escalable.</p>` },
+                { title: "Contenedores Flexibles", content: `<p>Usar unidades relativas en contenedores.</p>` },
+                { title: "Media Queries en HTML", content: `<p>Condicionales básicos usando media queries.</p>` },
+                { title: "Contenido Prioritario", content: `<p>Estructura que funciona en cualquier tamaño.</p>` },
+                { title: "Navegación Adaptativa", content: `<p>Menús que se adaptan a diferentes pantallas.</p>` },
+                { title: "¡Listo para el Quiz!", content: "<p>El diseño responsivo se adapta a todos los dispositivos. ¡Muestra que sabes crearlo!</p>" }
+            ],
+            quiz: [
+                { question: "¿Qué meta tag es esencial para responsive design?", options: ["viewport", "responsive", "mobile", "device"], answer: "viewport" },
+                { question: "¿Qué atributo hace imágenes responsivas?", options: ["responsive", "srcset", "sizes", "media"], answer: "srcset" },
+                { question: "¿Qué etiqueta permite diferentes imágenes según condiciones?", options: ["img", "picture", "responsive", "adaptive"], answer: "picture" },
+                { question: "¿Qué mejora las tablas en móviles?", options: ["Scroll horizontal", "Hacerlas más pequeñas", "Ocultar columnas", "Cambiar orientación"], answer: "Scroll horizontal" },
+                { question: "¿Qué unidades son mejores para texto responsivo?", options: ["px", "em/rem", "pt", "cm"], answer: "em/rem" },
+                { question: "¿Qué unidades son mejores para layouts responsivos?", options: ["px", "%", "em", "pt"], answer: "%" },
+                { question: "¿Qué atributo define condiciones para picture?", options: ["condition", "media", "query", "rule"], answer: "media" },
+                { question: "¿Qué es mobile-first?", options: ["Diseñar para móviles primero", "Diseñar para desktop primero", "No diseñar para móviles", "Solo para tablets"], answer: "Diseñar para móviles primero" },
+                { question: "¿Qué ancho debe tener el viewport?", options: ["Fijo", "device-width", "1000px", "800px"], answer: "device-width" },
+                { question: "¿Qué escala inicial es recomendada?", options: ["0.5", "1.0", "1.5", "2.0"], answer: "1.0" }
+            ]
+        },
+        { // Nivel 15
+            title: "Internacionalización",
+            lesson: [
+                { title: "Atributo Lang", content: `<p>Define el idioma del contenido.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-html"><html lang="es"></code></pre></div>` },
+                { title: "Dirección del Texto", content: `<p><code>dir</code> especifica dirección: ltr (izquierda a derecha), rtl (derecha a izquierda).</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-html"><p dir="rtl">Texto en árabe</p></code></pre></div>` },
+                { title: "Codificación de Caracteres", content: `<p><code>charset</code> define cómo se interpretan los caracteres.</p>` },
+                { title: "Idioma en Elementos", content: `<p><code>lang</code> en elementos específicos.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-html"><p lang="en">This is English text</p></code></pre></div>` },
+                { title: "Meta Content-Language", content: `<p>Especifica el idioma del documento.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-html"><meta http-equiv="content-language" content="es"></code></pre></div>` },
+                { title: "Hreflang", content: `<p>Enlaces a versiones en diferentes idiomas.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-html"><link rel="alternate" hreflang="en" href="english-version.html"></code></pre></div>` },
+                { title: "Fecha y Hora Internacional", content: `<p><code><time></code> marca fechas/horas con formato estándar.</p><div class="code-block rounded-lg overflow-hidden mt-4"><div class="code-block-header px-4 py-2 flex items-center gap-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span></div><pre class="p-4"><code class="language-html"><time datetime="2024-01-15">15 de enero de 2024</time></code></pre></div>` },
+                { title: "Números y Medidas", content: `<p>Usar formatos internacionales apropiados.</p>` },
+                { title: "Contenido Cultural", content: `<p>Considerar diferencias culturales en contenido.</p>` },
+                { title: "¡Listo para el Quiz!", content: "<p>La internacionalización hace tu sitio global. ¡Muestra que sabes internacionalizar!</p>" }
+            ],
+            quiz: [
+                { question: "¿Qué atributo define el idioma del documento?", options: ["lang", "language", "locale", "i18n"], answer: "lang" },
+                { question: "¿Qué valor tiene dir para español?", options: ["ltr", "rtl", "ttb", "btt"], answer: "ltr" },
+                { question: "¿Qué valor tiene dir para árabe?", options: ["ltr", "rtl", "ttb", "btt"], answer: "rtl" },
+                { question: "¿Qué meta tag especifica el idioma?", options: ["content-language", "language", "locale", "i18n"], answer: "content-language" },
+                { question: "¿Qué atributo especifica versiones en otros idiomas?", options: ["lang", "hreflang", "alternate", "locale"], answer: "hreflang" },
+                { question: "¿Qué etiqueta marca fechas y horas?", options: ["date", "time", "datetime", "calendar"], answer: "time" },
+                { question: "¿Qué atributo de time especifica el formato estándar?", options: ["datetime", "format", "standard", "iso"], answer: "datetime" },
+                { question: "¿Qué significa i18n?", options: ["Internationalization", "Internet", "Information", "Input"], answer: "Internationalization" },
+                { question: "¿Qué significa l10n?", options: ["Localization", "Language", "Location", "Local"], answer: "Localization" },
+                { question: "¿Por qué es importante la internacionalización?", options: ["Solo para diseño", "Para llegar a más usuarios", "Solo para SEO", "Solo para velocidad"], answer: "Para llegar a más usuarios" }
+            ]
+        },
+        { // Nivel 16
+            title: "Seguridad Web",
+            lesson: [
+                {
+                    title: "XSS (Cross-Site Scripting)",
+                    content: `
+                        <p>El XSS permite a atacantes inyectar scripts maliciosos en páginas web.</p>
+                        <p>Para prevenirlo: <code>sanitize</code> entradas, usa <code>Content Security Policy (CSP)</code>, evita <code>innerHTML</code> peligroso.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><!-- Seguro -->
+<input value="<script>alert('xss')</script>">
+
+<!-- Vulnerable -->
+<div>${userInput}</div></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Content Security Policy",
+                    content: `
+                        <p><code>CSP</code> controla recursos que puede cargar la página mediante meta tags o headers HTTP.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://trusted.com"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "CSRF Protection",
+                    content: `
+                        <p>El Cross-Site Request Forgery obliga a usuarios autenticados a realizar acciones no deseadas.</p>
+                        <p>Prevención: usar tokens CSRF, verificar origen de requests, implementar SameSite cookies.</p>
+                    `
+                },
+                {
+                    title: "Validación de Entradas",
+                    content: `
+                        <p>Siempre valida y sanitiza datos del lado servidor y cliente.</p>
+                        <p>Usa <code>pattern</code>, <code>required</code>, <code>maxlength</code> en formularios HTML5.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><input type="email" pattern="[^@]+@[^@]+\\.[^@]+" required></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "HTTPS y Seguridad",
+                    content: `
+                        <p>Siempre usa HTTPS para encriptar comunicaciones.</p>
+                        <p>Configura <code>Strict-Transport-Security</code> para forzar HTTPS.</p>
+                    `
+                },
+                {
+                    title: "Headers de Seguridad",
+                    content: `
+                        <p>Headers importantes: <code>X-Frame-Options</code>, <code>X-Content-Type-Options</code>, <code>Referrer-Policy</code>.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><meta http-equiv="X-Frame-Options" content="DENY">
+<meta http-equiv="X-Content-Type-Options" content="nosniff"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Escaping HTML",
+                    content: `
+                        <p>Convierte caracteres especiales a entidades HTML para prevenir inyección.</p>
+                        <p>Usa <code>textContent</code> en lugar de <code>innerHTML</code> cuando sea posible.</p>
+                    `
+                },
+                {
+                    title: "Cookies Seguras",
+                    content: `
+                        <p>Configura atributos de seguridad: <code>HttpOnly</code>, <code>Secure</code>, <code>SameSite</code>.</p>
+                    `
+                },
+                {
+                    title: "OWASP Top 10",
+                    content: `
+                        <p>Principales riesgos de seguridad web identificados por OWASP.</p>
+                        <p>Incluye: Injection, Broken Authentication, Sensitive Data Exposure, etc.</p>
+                    `
+                },
+                {
+                    title: "¡Listo para el Quiz!",
+                    content: "<p>La seguridad web protege usuarios y datos. ¡Muestra que sabes implementar medidas de seguridad!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Qué previene el XSS?", options: ["Inyección de código", "Robo de cookies", "Ataques de red", "Problemas de rendimiento"], answer: "Inyección de código" },
+                { question: "¿Qué política controla recursos cargables?", options: ["CSP", "HTTPS", "HSTS", "CORS"], answer: "CSP" },
+                { question: "¿Qué header previene clickjacking?", options: ["X-Frame-Options", "X-Content-Type-Options", "Referrer-Policy", "Content-Security-Policy"], answer: "X-Frame-Options" },
+                { question: "¿Qué atributo hace cookies inaccesibles a JavaScript?", options: ["Secure", "HttpOnly", "SameSite", "Domain"], answer: "HttpOnly" },
+                { question: "¿Qué valida entradas del usuario?", options: ["Sanitización", "Validación", "Ambas", "Ninguna"], answer: "Ambas" },
+                { question: "¿Qué método es más seguro que innerHTML?", options: ["outerHTML", "textContent", "innerText", "insertAdjacentHTML"], answer: "textContent" },
+                { question: "¿Qué protocolo encripta comunicaciones?", options: ["HTTP", "HTTPS", "FTP", "SMTP"], answer: "HTTPS" },
+                { question: "¿Qué header previene sniffing de MIME?", options: ["X-Frame-Options", "X-Content-Type-Options", "Referrer-Policy", "Strict-Transport-Security"], answer: "X-Content-Type-Options" },
+                { question: "¿Qué organización publica OWASP Top 10?", options: ["OWASP", "W3C", "IETF", "ISO"], answer: "OWASP" },
+                { question: "¿Qué atributo CSRF usa tokens únicos?", options: ["csrf-token", "xsrf-token", "authenticity_token", "Todas las anteriores"], answer: "Todas las anteriores" }
+            ]
+        },
+        { // Nivel 17
+            title: "Optimización de Rendimiento",
+            lesson: [
+                {
+                    title: "Minificación",
+                    content: `
+                        <p>Reduce tamaño de archivos HTML, CSS y JavaScript eliminando espacios innecesarios.</p>
+                        <p>Herramientas: HTMLMinifier, Terser, cssnano.</p>
+                    `
+                },
+                {
+                    title: "Compresión Gzip",
+                    content: `
+                        <p>Comprime archivos en servidor antes de enviarlos al navegador.</p>
+                        <p>Puede reducir tamaño hasta 70-90%.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-apacheconf"># Apache
+<IfModule mod_deflate.c>
+ AddOutputFilterByType DEFLATE text/html text/css application/javascript
+</IfModule></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Lazy Loading",
+                    content: `
+                        <p>Carga imágenes y recursos solo cuando son necesarios.</p>
+                        <p>Atributo <code>loading="lazy"</code> en imágenes.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><img src="imagen.jpg" loading="lazy" alt="Imagen"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Critical CSS",
+                    content: `
+                        <p>Extrae CSS crítico para renderizado above-the-fold.</p>
+                        <p>Mejora métricas como First Contentful Paint.</p>
+                    `
+                },
+                {
+                    title: "Resource Hints",
+                    content: `
+                        <p>Optimiza carga de recursos con <code>preload</code>, <code>prefetch</code>, <code>preconnect</code>.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preload" href="critical.js" as="script"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Optimización de Imágenes",
+                    content: `
+                        <p>Usa formatos modernos: WebP, AVIF. Comprime imágenes sin perder calidad.</p>
+                        <p>Herramientas: ImageOptim, TinyPNG, Squoosh.</p>
+                    `
+                },
+                {
+                    title: "Code Splitting",
+                    content: `
+                        <p>Divide código JavaScript en chunks más pequeños.</p>
+                        <p>Mejora tiempo de carga inicial.</p>
+                    `
+                },
+                {
+                    title: "Caching",
+                    content: `
+                        <p>Configura headers de cache apropiados para recursos estáticos.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-apacheconf"># Cache CSS/JS por 1 año
+<IfModule mod_expires.c>
+ ExpiresByType text/css "access plus 1 year"
+ ExpiresByType application/javascript "access plus 1 year"
+</IfModule></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Bundle Optimization",
+                    content: `
+                        <p>Reduce tamaño de bundles eliminando código no usado (tree shaking).</p>
+                        <p>Usa herramientas como Webpack, Rollup, Parcel.</p>
+                    `
+                },
+                {
+                    title: "¡Listo para el Quiz!",
+                    content: "<p>La optimización mejora velocidad y experiencia del usuario. ¡Muestra que sabes optimizar sitios web!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Qué reduce tamaño de archivos eliminando espacios?", options: ["Compresión", "Minificación", "Optimización", "Compilación"], answer: "Minificación" },
+                { question: "¿Qué algoritmo comprime archivos en servidor?", options: ["Brotli", "Gzip", "Deflate", "Ambos A y B"], answer: "Ambos A y B" },
+                { question: "¿Qué atributo carga imágenes perezosamente?", options: ["defer", "async", "loading", "lazy"], answer: "loading" },
+                { question: "¿Qué mejora First Contentful Paint?", options: ["CSS crítico", "JavaScript crítico", "HTML crítico", "Font crítico"], answer: "CSS crítico" },
+                { question: "¿Qué resource hint preconecciona a dominios?", options: ["preload", "prefetch", "preconnect", "dns-prefetch"], answer: "preconnect" },
+                { question: "¿Qué formato de imagen es más moderno que JPEG?", options: ["PNG", "WebP", "GIF", "BMP"], answer: "WebP" },
+                { question: "¿Qué técnica divide código en chunks?", options: ["Code splitting", "Code bundling", "Code minification", "Code compression"], answer: "Code splitting" },
+                { question: "¿Qué header controla cache de recursos?", options: ["Cache-Control", "Expires", "Last-Modified", "ETag"], answer: "Cache-Control" },
+                { question: "¿Qué elimina código no usado?", options: ["Tree shaking", "Dead code elimination", "Bundle optimization", "Todas las anteriores"], answer: "Todas las anteriores" },
+                { question: "¿Qué métrica mide velocidad de carga percibida?", options: ["First Contentful Paint", "Largest Contentful Paint", "Time to Interactive", "Cumulative Layout Shift"], answer: "First Contentful Paint" }
+            ]
+        },
+        { // Nivel 18
+            title: "Testing y Debugging",
+            lesson: [
+                {
+                    title: "Tipos de Testing",
+                    content: `
+                        <p>Testing unitario, integración, end-to-end (e2e), accesibilidad.</p>
+                        <p>Herramientas: Jest, Mocha, Cypress, Playwright.</p>
+                    `
+                },
+                {
+                    title: "HTML Validation",
+                    content: `
+                        <p>Valida sintaxis HTML con W3C Markup Validator.</p>
+                        <p>Detecta errores de estructura y elementos obsoletos.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><!-- Error común -->
+<img src="imagen.jpg"> <!-- Falta alt -->
+
+<!-- Correcto -->
+<img src="imagen.jpg" alt="Descripción"></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Browser DevTools",
+                    content: `
+                        <p>Herramientas integradas en navegadores para debugging.</p>
+                        <p>Console, Network, Elements, Performance, Memory.</p>
+                    `
+                },
+                {
+                    title: "Console Logging",
+                    content: `
+                        <p>Usa <code>console.log()</code>, <code>console.error()</code>, <code>console.warn()</code> para debugging.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-javascript">console.log('Valor de variable:', miVariable);
+console.error('Error en función:', error);</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Breakpoints",
+                    content: `
+                        <p>Puntos de interrupción en código para debugging paso a paso.</p>
+                        <p>Usa debugger statement o DevTools.</p>
+                    `
+                },
+                {
+                    title: "Performance Testing",
+                    content: `
+                        <p>Mide velocidad de carga con Lighthouse, PageSpeed Insights.</p>
+                        <p>Core Web Vitals: LCP, FID, CLS.</p>
+                    `
+                },
+                {
+                    title: "Cross-Browser Testing",
+                    content: `
+                        <p>Asegura compatibilidad en diferentes navegadores.</p>
+                        <p>Herramientas: BrowserStack, Sauce Labs, CrossBrowserTesting.</p>
+                    `
+                },
+                {
+                    title: "Responsive Testing",
+                    content: `
+                        <p>Prueba diseño en diferentes tamaños de pantalla.</p>
+                        <p>Usa DevTools device toolbar o herramientas como Responsively.</p>
+                    `
+                },
+                {
+                    title: "Accessibility Testing",
+                    content: `
+                        <p>Verifica accesibilidad con axe-core, WAVE, Lighthouse accessibility audit.</p>
+                        <p>Pruebas manuales con lectores de pantalla.</p>
+                    `
+                },
+                {
+                    title: "¡Listo para el Quiz!",
+                    content: "<p>Testing asegura calidad y debugging resuelve problemas. ¡Muestra que sabes testear y debuggear!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Qué tipo de testing prueba componentes individuales?", options: ["Unit testing", "Integration testing", "E2E testing", "Performance testing"], answer: "Unit testing" },
+                { question: "¿Qué herramienta valida sintaxis HTML?", options: ["W3C Validator", "HTML Validator", "Markup Validator", "Todas las anteriores"], answer: "Todas las anteriores" },
+                { question: "¿Qué panel de DevTools muestra errores JavaScript?", options: ["Console", "Network", "Elements", "Sources"], answer: "Console" },
+                { question: "¿Qué método registra mensajes en consola?", options: ["log()", "print()", "debug()", "trace()"], answer: "log()" },
+                { question: "¿Qué detiene ejecución para debugging?", options: ["stop", "break", "pause", "debugger"], answer: "debugger" },
+                { question: "¿Qué herramienta mide Core Web Vitals?", options: ["Lighthouse", "PageSpeed", "Ambas", "Ninguna"], answer: "Ambas" },
+                { question: "¿Qué métrica mide estabilidad visual?", options: ["LCP", "FID", "CLS", "TTI"], answer: "CLS" },
+                { question: "¿Qué tipo de testing verifica flujo completo?", options: ["Unit", "Integration", "E2E", "Component"], answer: "E2E" },
+                { question: "¿Qué herramienta prueba en múltiples navegadores?", options: ["BrowserStack", "Sauce Labs", "Ambas", "Solo DevTools"], answer: "Ambas" },
+                { question: "¿Qué atributo falta en img para accesibilidad?", options: ["src", "alt", "width", "height"], answer: "alt" }
+            ]
+        },
+        { // Nivel 19
+            title: "Herramientas y Frameworks",
+            lesson: [
+                {
+                    title: "Preprocesadores",
+                    content: `
+                        <p>Extienden funcionalidades: Sass/SCSS, Less, PostCSS.</p>
+                        <p>Características: variables, nesting, mixins, funciones.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-scss">// SCSS
+$primary-color: #007bff;
+.button {
+ background-color: $primary-color;
+ &:hover {
+   background-color: darken($primary-color, 10%);
+ }
+}</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Build Tools",
+                    content: `
+                        <p>Automatizan tareas: Webpack, Vite, Parcel, Gulp.</p>
+                        <p>Características: bundling, minificación, hot reload.</p>
+                    `
+                },
+                {
+                    title: "Template Engines",
+                    content: `
+                        <p>Generan HTML dinámico: Handlebars, EJS, Pug, Nunjucks.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-handlebars">// Handlebars
+<div>
+ <h1>{{title}}</h1>
+ {{#each items}}
+   <p>{{this}}</p>
+ {{/each}}
+</div></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Static Site Generators",
+                    content: `
+                        <p>Construyen sitios estáticos: Hugo, Gatsby, Next.js, Eleventy.</p>
+                        <p>Ventajas: velocidad, seguridad, SEO-friendly.</p>
+                    `
+                },
+                {
+                    title: "Package Managers",
+                    content: `
+                        <p>Administran dependencias: npm, yarn, pnpm.</p>
+                        <p>Comandos básicos: install, update, remove.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-bash"># Instalar dependencias
+npm install
+
+# Instalar paquete específico
+npm install lodash
+
+# Actualizar paquetes
+npm update</code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Version Control",
+                    content: `
+                        <p>Git para rastrear cambios en código.</p>
+                        <p>Comandos básicos: init, add, commit, push, pull.</p>
+                    `
+                },
+                {
+                    title: "IDEs y Editores",
+                    content: `
+                        <p>VS Code, Sublime Text, Atom, Vim, Emacs.</p>
+                        <p>Extensiones útiles: Live Server, Prettier, ESLint.</p>
+                    `
+                },
+                {
+                    title: "Browser Extensions",
+                    content: `
+                        <p>Herramientas para desarrollo: React DevTools, Redux DevTools, axe DevTools.</p>
+                        <p>Mejoran productividad y debugging.</p>
+                    `
+                },
+                {
+                    title: "Command Line Tools",
+                    content: `
+                        <p>Herramientas de línea de comandos: curl, wget, grep, sed.</p>
+                        <p>Útiles para testing y automatización.</p>
+                    `
+                },
+                {
+                    title: "¡Listo para el Quiz!",
+                    content: "<p>Herramientas y frameworks aceleran desarrollo. ¡Muestra que sabes usarlas efectivamente!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Qué preprocesador CSS usa variables?", options: ["Sass", "Less", "Ambos", "Ninguno"], answer: "Ambos" },
+                { question: "¿Qué build tool es más rápido para desarrollo?", options: ["Webpack", "Vite", "Parcel", "Rollup"], answer: "Vite" },
+                { question: "¿Qué template engine usa {{}}?", options: ["Handlebars", "EJS", "Pug", "Nunjucks"], answer: "Handlebars" },
+                { question: "¿Qué static site generator usa React?", options: ["Hugo", "Gatsby", "Eleventy", "Jekyll"], answer: "Gatsby" },
+                { question: "¿Qué comando instala dependencias con npm?", options: ["install", "get", "add", "require"], answer: "install" },
+                { question: "¿Qué comando guarda cambios en git?", options: ["save", "commit", "push", "add"], answer: "commit" },
+                { question: "¿Qué editor es más popular para desarrollo web?", options: ["VS Code", "Sublime Text", "Atom", "Vim"], answer: "VS Code" },
+                { question: "¿Qué extensión ayuda con formato de código?", options: ["Prettier", "Beautifier", "Formatter", "Cleaner"], answer: "Prettier" },
+                { question: "¿Qué herramienta prueba APIs REST?", options: ["curl", "wget", "fetch", "axios"], answer: "curl" },
+                { question: "¿Qué extensión ayuda con accesibilidad?", options: ["axe DevTools", "Lighthouse", "WAVE", "Todas las anteriores"], answer: "Todas las anteriores" }
+            ]
+        },
+        { // Nivel 20
+            title: "Mejores Prácticas y Estándares",
+            lesson: [
+                {
+                    title: "HTML Semántico",
+                    content: `
+                        <p>Usa elementos apropiados según su significado, no por apariencia.</p>
+                        <p>Beneficios: accesibilidad, SEO, mantenibilidad.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><!-- Bueno -->
+<article>
+ <h2>Título</h2>
+ <p>Contenido</p>
+</article>
+
+<!-- Malo -->
+<div class="article">
+ <div class="title">Título</div>
+ <div class="content">Contenido</div>
+</div></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Convenciones de Nomenclatura",
+                    content: `
+                        <p>Usa nombres descriptivos y consistentes para IDs y clases.</p>
+                        <p>Convenciones: camelCase, kebab-case, snake_case, BEM.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><!-- BEM -->
+<div class="card">
+ <div class="card__header">
+   <h2 class="card__title">Título</h2>
+ </div>
+ <div class="card__body">Contenido</div>
+</div></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Comentarios Efectivos",
+                    content: `
+                        <p>Escribe comentarios útiles que expliquen el porqué, no el qué.</p>
+                        <p>Actualiza comentarios cuando cambies código.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><!-- Este formulario se usa para contacto de soporte
+    porque requiere validación especial de email corporativo -->
+<form id="support-contact-form">
+ <input type="email" pattern="@empresa\.com$" required>
+</form></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Mantenibilidad",
+                    content: `
+                        <p>Escribe código fácil de entender y modificar.</p>
+                        <p>Principios: DRY (Don't Repeat Yourself), KISS (Keep It Simple), SOLID.</p>
+                    `
+                },
+                {
+                    title: "Performance Best Practices",
+                    content: `
+                        <p>Minimiza recursos, optimiza imágenes, usa CDN, implementa caching.</p>
+                        <p>Evita render-blocking resources.</p>
+                    `
+                },
+                {
+                    title: "SEO Best Practices",
+                    content: `
+                        <p>Estructura semántica, meta tags apropiados, URLs limpias, contenido de calidad.</p>
+                        <p>Usa Schema.org markup para rich snippets.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-4">
+                          <div class="code-block-header px-4 py-2 flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full"></span><span class="w-3 h-3 bg-yellow-500 rounded-full"></span><span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                          </div>
+                          <pre class="p-4"><code class="language-html"><script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Article",
+ "headline": "Título del artículo"
+}
+</script></code></pre>
+                        </div>
+                    `
+                },
+                {
+                    title: "Accessibility Best Practices",
+                    content: `
+                        <p>Contraste adecuado, navegación por teclado, lectores de pantalla.</p>
+                        <p>Usa ARIA cuando HTML semántico no sea suficiente.</p>
+                    `
+                },
+                {
+                    title: "Código Limpio",
+                    content: `
+                        <p>Formato consistente, indentación apropiada, estructura lógica.</p>
+                        <p>Usa herramientas como Prettier para formateo automático.</p>
+                    `
+                },
+                {
+                    title: "Documentación",
+                    content: `
+                        <p>Documenta componentes, APIs, y decisiones arquitectónicas.</p>
+                        <p>Herramientas: JSDoc, README files, wikis internos.</p>
+                    `
+                },
+                {
+                    title: "¡Felicidades! Nivel Completado",
+                    content: "<p>¡Has completado todos los niveles del curso de HTML! Ahora eres un desarrollador web completo con conocimientos avanzados en estructura web, seguridad, optimización, testing y mejores prácticas. ¡Sigue practicando y construyendo proyectos increíbles!</p>"
+                }
+            ],
+            quiz: [
+                { question: "¿Qué principio evita repetir código?", options: ["KISS", "DRY", "SOLID", "YAGNI"], answer: "DRY" },
+                { question: "¿Qué principio mantiene simplicidad?", options: ["KISS", "DRY", "SOLID", "YAGNI"], answer: "KISS" },
+                { question: "¿Qué metodología usa BEM?", options: ["Nomenclatura de clases", "Arquitectura de apps", "Testing", "Deployment"], answer: "Nomenclatura de clases" },
+                { question: "¿Qué tipo de comentarios son más útiles?", options: ["Qué hace el código", "Por qué existe el código", "Ambos", "Ninguno"], answer: "Por qué existe el código" },
+                { question: "¿Qué formato usa Schema.org?", options: ["Microdata", "JSON-LD", "RDFa", "Todos los anteriores"], answer: "Todos los anteriores" },
+                { question: "¿Qué mejora SEO en HTML?", options: ["Solo meta tags", "Solo contenido", "Estructura semántica", "Solo imágenes"], answer: "Estructura semántica" },
+                { question: "¿Qué ratio de contraste es mínimo para AA?", options: ["3:1", "4.5:1", "7:1", "10:1"], answer: "4.5:1" },
+                { question: "¿Qué herramienta formatea código automáticamente?", options: ["Prettier", "ESLint", "Babel", "Webpack"], answer: "Prettier" },
+                { question: "¿Qué extensión tienen archivos README?", options: [".md", ".txt", ".doc", ".html"], answer: ".md" },
+                { question: "¿Qué es más importante en código mantenible?", options: ["Velocidad", "Legibilidad", "Tamaño", "Complejidad"], answer: "Legibilidad" }
+            ]
+        }
+    ];
+
+    // Rellenar hasta 20 niveles con datos de marcador para que la cuadrícula funcione
+    const NUM_LEVELS = 20;
+    for (let i = courseData.length; i < NUM_LEVELS; i++) {
+        courseData.push({
+            name: `Nivel ${i + 1} (Próximamente)`,
+            lesson: [{ title: "Próximamente", content: "<p>Contenido en desarrollo.</p>" }],
+            quiz: [{ question: "¿Prueba?", options: ["A", "B", "C", "D"], answer: "A" }]
+        });
+    }
+
+    // --- CONFIGURACIÓN E INICIALIZACIÓN DE LA APLICACIÓN ---
+    let currentLevel = 0;
+    let unlockedLevel = 1;
+    let currentLessonStep = 0;
+    let currentQuizQuestion = 0;
+    let score = 0;
+    const COURSE_ID = 'html';
+
+    const panels = {
+        levelSelection: document.getElementById('level-selection-panel'),
+        lesson: document.getElementById('lesson-panel'),
+        quiz: document.getElementById('quiz-panel'),
+        results: document.getElementById('results-panel')
+    };
+
+    function showPanel(panelName) {
+        Object.values(panels).forEach(p => p.classList.remove('active'));
+        panels[panelName].classList.add('active');
+        lucide.createIcons();
+    }
+
+    // Lógica de guardado y carga
+    function saveProgress() {
+        localStorage.setItem(`${COURSE_ID}_levelUnlocked`, unlockedLevel);
+    }
+
+    function loadProgress() {
+        const savedLevel = localStorage.getItem(`${COURSE_ID}_levelUnlocked`);
+        if (savedLevel) {
+            unlockedLevel = parseInt(savedLevel, 10);
+        }
+    }
+
+    // Renderizar la selección de nivel
+    function renderLevelSelection() {
+        const levelGrid = document.getElementById('level-grid');
+        levelGrid.innerHTML = '';
+        for (let i = 1; i <= courseData.length; i++) {
+            const levelButton = document.createElement('button');
+            levelButton.textContent = i;
+            levelButton.className = `w-16 h-16 flex items-center justify-center font-bold text-xl rounded-lg border-2 transition`;
+            
+            // Check if level is completed (passing the quiz of the previous level)
+            const isCompleted = i < unlockedLevel;
+
+            if (i <= unlockedLevel) {
+                levelButton.style.borderColor = 'var(--accent)';
+                levelButton.style.color = 'var(--accent)';
+                levelButton.onclick = () => startLevel(i - 1);
+            } else {
+                levelButton.style.borderColor = 'var(--border)';
+                levelButton.style.color = 'var(--border)';
+                levelButton.disabled = true;
+                levelButton.classList.add('cursor-not-allowed');
+            }
+
+            if (isCompleted) {
+                 levelButton.style.borderColor = 'var(--green)';
+                 levelButton.style.color = 'var(--card-background)';
+                 levelButton.style.backgroundColor = 'var(--green)';
+            }
+            
+            levelGrid.appendChild(levelButton);
+        }
+    }
+
+    function startLevel(levelIndex) {
+        if (!courseData[levelIndex]) return;
+        currentLevel = levelIndex;
+        currentLessonStep = 0;
+        renderLesson();
+        showPanel('lesson');
+    }
+    
+    function renderLesson() {
+        const levelData = courseData[currentLevel];
+        const stepData = levelData.lesson[currentLessonStep];
+        
+        document.getElementById('lesson-title').textContent = `Nivel ${currentLevel + 1}: ${levelData.name}`;
+        document.getElementById('lesson-content').innerHTML = stepData.content;
+        document.getElementById('lesson-step').textContent = `${currentLessonStep + 1} / ${levelData.lesson.length}`;
+        
+        const progress = ((currentLessonStep + 1) / levelData.lesson.length) * 100;
+        document.getElementById('lesson-progress').style.width = `${progress}%`;
+
+        document.getElementById('prev-btn').style.visibility = currentLessonStep === 0 ? 'hidden' : 'visible';
+        
+        const nextBtn = document.getElementById('next-btn');
+        if (currentLessonStep === levelData.lesson.length - 1) {
+            nextBtn.textContent = 'Iniciar Quiz';
+        } else {
+            nextBtn.textContent = 'Siguiente';
+        }
+    }
+
+    function startQuiz() {
+        currentQuizQuestion = 0;
+        score = 0;
+        renderQuizQuestion();
+        showPanel('quiz');
+    }
+    
+    // Función para barajar un array aleatoriamente
+    function shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
+    function renderQuizQuestion() {
+        const levelData = courseData[currentLevel];
+        const questionData = levelData.quiz[currentQuizQuestion];
+
+        document.getElementById('quiz-level-title').textContent = `Quiz - Nivel ${currentLevel + 1}`;
+        document.getElementById('quiz-progress').textContent = `${currentQuizQuestion + 1}/${levelData.quiz.length}`;
+        document.getElementById('quiz-question').textContent = questionData.question;
+
+        const optionsContainer = document.getElementById('quiz-options');
+        optionsContainer.innerHTML = '';
+
+        // Crear letras fijas en orden a, b, c, d
+        const letters = ['a', 'b', 'c', 'd'];
+
+        // Barajar las opciones antes de asignarlas a las letras
+        const shuffledOptions = shuffleArray(questionData.options);
+
+        // Crear opciones con letras fijas pero contenido aleatorio
+        letters.forEach((letter, index) => {
+            const optionButton = document.createElement('button');
+            optionButton.textContent = `${letter}) ${shuffledOptions[index]}`;
+            optionButton.className = 'quiz-option p-4 rounded-lg text-left';
+            optionButton.onclick = () => checkAnswer(optionButton, shuffledOptions[index], questionData.answer);
+            optionsContainer.appendChild(optionButton);
+        });
+    }
+
+    function checkAnswer(button, selectedAnswer, correctAnswer) {
+        const options = document.querySelectorAll('#quiz-options .quiz-option');
+        options.forEach(opt => {
+            opt.classList.add('disabled');
+            if (opt.textContent === correctAnswer) {
+                opt.classList.add('correct');
+            } else if (opt.textContent === selectedAnswer) {
+                opt.classList.add('incorrect');
+            }
+        });
+
+        if (selectedAnswer === correctAnswer) {
+            score++;
+        }
+
+        setTimeout(() => {
+            currentQuizQuestion++;
+            if (currentQuizQuestion < courseData[currentLevel].quiz.length) {
+                renderQuizQuestion();
+            } else {
+                showResults();
+            }
+        }, 1500);
+    }
+    
+    function showResults() {
+        const passed = score >= courseData[currentLevel].quiz.length * 0.75; // 75% to pass
+        document.getElementById('results-title').textContent = passed ? '¡Felicidades!' : 'Sigue Intentando';
+        document.getElementById('results-score').textContent = `Tu puntuación: ${score} / ${courseData[currentLevel].quiz.length}`;
+        document.getElementById('results-message').textContent = passed 
+            ? '¡Has desbloqueado el siguiente nivel!' 
+            : `Necesitas ${Math.ceil(courseData[currentLevel].quiz.length * 0.75)} respuestas correctas para pasar. ¡No te rindas!`;
+
+        const nextLevelBtn = document.getElementById('next-level-btn');
+        if (passed) {
+            if (unlockedLevel <= currentLevel + 1) {
+                unlockedLevel = currentLevel + 2;
+                saveProgress();
+            }
+            nextLevelBtn.classList.remove('hidden');
+        } else {
+            nextLevelBtn.classList.add('hidden');
+        }
+        showPanel('results');
+    }
+
+    // --- EVENT LISTENERS DE LA APLICACIÓN ---
+    document.getElementById('next-btn').addEventListener('click', () => {
+        if (currentLessonStep < courseData[currentLevel].lesson.length - 1) {
+            currentLessonStep++;
+            renderLesson();
+        } else {
+            startQuiz();
+        }
+    });
+
+    document.getElementById('prev-btn').addEventListener('click', () => {
+        if (currentLessonStep > 0) {
+            currentLessonStep--;
+            renderLesson();
+        }
+    });
+
+    document.getElementById('close-lesson-btn').addEventListener('click', () => {
+        renderLevelSelection();
+        showPanel('levelSelection');
+    });
+    
+    document.getElementById('retry-lesson-btn').addEventListener('click', () => {
+        startLevel(currentLevel);
+    });
+
+    document.getElementById('next-level-btn').addEventListener('click', () => {
+        // Mover al siguiente nivel si existe
+        if (currentLevel + 1 < courseData.length) {
+             startLevel(currentLevel + 1);
+        } else {
+            renderLevelSelection();
+            showPanel('levelSelection');
+        }
+    });
+
+    // Theme toggle functionality
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+        const html = document.documentElement;
+        const icon = document.querySelector('#theme-toggle i');
+
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            icon.setAttribute('data-lucide', 'moon');
+            // Background placeholder
+            document.querySelector('.background-night').style.opacity = 0;
+            document.querySelector('.background-day').style.opacity = 1;
+
+        } else {
+            html.classList.add('dark');
+            icon.setAttribute('data-lucide', 'sun');
+            // Background placeholder
+            document.querySelector('.background-night').style.opacity = 1;
+            document.querySelector('.background-day').style.opacity = 0;
+        }
+        lucide.createIcons();
+    });
+
+    // --- LÓGICA DEL CHATBOT DE LA IA ---
+
+    const apiKey = "AIzaSyBxHIS5VwYBP6lmS50EExba18FLrfklgaU"; // API Key is provided by the environment
+    const model = 'gemini-2.5-flash-preview-09-2025';
+    const chatModal = document.getElementById('chat-modal');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const chatSendBtn = document.getElementById('chat-send-btn');
+    const chatLoading = document.getElementById('chat-loading');
+
+    // System instruction que define la personalidad y las restricciones
+    const systemInstruction = `Eres un Asistente de Código amable y conciso, especializado en HTML. Tu respuesta debe tener un tono amable, ser breve y utilizar un 20% de terminología técnica apropiada (como 'elemento', 'atributo', 'DOM', 'semántica', 'hipervínculo').
+
+REGLA CRÍTICA: Debes responder a las preguntas usando EXCLUSIVAMENTE la información que se te proporciona en el 'CONTEXTO DEL CURSO' a continuación.
+
+Si la pregunta NO tiene relación con HTML, las lecciones, los niveles, o la estructura del curso proporcionada en el contexto, debes responder amablemente que tu función se limita a ayudar con el contenido de la academia, por ejemplo: "Mi función es asistir con las lecciones de HTML. ¿Podrías preguntar algo sobre las etiquetas o la estructura del curso?"
+`;
+
+    function getCourseContext() {
+        // Codifica el objeto completo del curso en una cadena JSON para dar contexto a la IA
+        return JSON.stringify(courseData, null, 2);
+    }
+
+    // Maneja la interfaz de usuario para el envío de mensajes
+    chatSendBtn.addEventListener('click', handleChatSubmit);
+    
+    document.getElementById('chat-toggle-btn').addEventListener('click', () => {
+        chatModal.classList.toggle('hidden');
+        lucide.createIcons();
+    });
+
+    document.getElementById('chat-close-btn').addEventListener('click', () => {
+        chatModal.classList.add('hidden');
+    });
+
+
+    function handleChatSubmit() {
+        const userQuery = chatInput.value.trim();
+        if (!userQuery) return;
+
+        // Mostrar el mensaje del usuario
+        appendMessage(userQuery, 'user');
+        chatInput.value = '';
+        
+        // Desactivar entrada y mostrar carga
+        chatSendBtn.disabled = true;
+        chatInput.disabled = true;
+        chatLoading.classList.remove('hidden');
+
+        // Generar respuesta de la IA
+        generateAIResponse(userQuery);
+    }
+
+    function appendMessage(text, sender) {
+        const messageContainer = document.createElement('div');
+        messageContainer.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
+        
+        const messageBubble = document.createElement('div');
+        messageBubble.className = `chat-message-bubble ${sender === 'user' ? 'user-message' : 'ai-message'}`;
+        
+        // Uso de innerText en lugar de innerHTML para prevenir XSS y asegurar texto plano
+        messageBubble.innerText = text;
+        
+        messageContainer.appendChild(messageBubble);
+        chatMessages.appendChild(messageContainer);
+        
+        // Desplazarse hacia abajo para ver el mensaje más reciente
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function callGeminiApi(prompt, retries = 0) {
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        const courseContext = getCourseContext();
+
+        // Combina el contexto y la pregunta para la IA
+        const queryWithContext = `CONTEXTO DEL CURSO:\n---\n${courseContext}\n---\n\nPREGUNTA DEL USUARIO: ${prompt}`;
+
+        const payload = {
+            contents: [{ parts: [{ text: queryWithContext }] }],
+            systemInstruction: {
+                parts: [{ text: systemInstruction }]
+            }
+        };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                if (response.status === 429 && retries < 3) {
+                    const delay = Math.pow(2, retries) * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    return callGeminiApi(prompt, retries + 1); // Retry with exponential backoff
+                }
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "Disculpa, no pude generar una respuesta. Por favor, inténtalo de nuevo.";
+            return text;
+
+        } catch (error) {
+            console.error('Error al llamar a la API de Gemini:', error);
+            return "Lo siento, hubo un problema de conexión con el Asistente de Código. Por favor, revisa tu conexión o intenta más tarde.";
+        }
+    }
+
+    async function generateAIResponse(userQuery) {
+        const aiResponse = await callGeminiApi(userQuery);
+
+        // Restaurar UI
+        chatSendBtn.disabled = false;
+        chatInput.disabled = false;
+        chatLoading.classList.add('hidden');
+        
+        appendMessage(aiResponse, 'ai');
+    }
+
+    // Inicialización de la aplicación
+    document.addEventListener('DOMContentLoaded', () => {
+        loadProgress();
+        renderLevelSelection();
+        showPanel('levelSelection');
+        // Inicializar iconos de lucide para el botón del chat
+        lucide.createIcons();
+    });
     </script>
-  </body>
+</body>
 </html>
